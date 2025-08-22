@@ -1,0 +1,15 @@
+.container_admin{
+    margin: 3rem;
+    border: 1px;
+    height: 100px;
+}
+@media (max-width: 724px) {
+    .container_admin{
+        margin: 2rem;
+    }
+}
+@media (max-width: 640px) {
+    .container_admin{
+        margin: 1rem;
+    }
+}

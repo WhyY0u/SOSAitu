@@ -1,0 +1,77 @@
+.header {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #dddedf;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 10px;
+    background-color: white;
+    justify-content: space-between;
+}
+.header_left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header_icon {
+    background: linear-gradient(135deg, #6065fa, #8c69f4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 10px;
+}
+
+.header_title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #6065fa, #8c69f4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header_subtitle {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.user_info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.user_text {
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user_icon {
+    font-size: 22px;
+    color: #6065fa; 
+}
+
+.user_role {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+.user_id {
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 400;
+    color: #4e4e4e;
+}

@@ -1,0 +1,132 @@
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.login_box {
+    width: auto;
+    padding: 25px;
+    margin-top: 30px;
+    border-radius: 30px;
+    border: 1px solid rgb(235, 235, 235);
+    background-color: rgb(248, 248, 248);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 1.2s; 
+}
+
+
+.avatar {
+    color: #6065fa;
+    display: block;
+    margin: 0 auto 12px;
+    filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.4));
+}
+
+.text {
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    background: linear-gradient(135deg, #6065fa, #8c69f4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+}
+
+.text_small {
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(122, 120, 120);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input_group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input_group svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+input {
+    width: 80%;
+    padding: 12px 14px 12px 38px;
+    border-radius: 14px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    outline: none;
+    background: #f9fafb;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+
+
+input:focus + svg {
+    color: #6065fa;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    transition: background-position 0.5s ease, transform 0.2s, box-shadow 0.3s ease;
+}
+
+button.active {
+    background: linear-gradient(135deg, #6065fa, #8c69f4, #6065fa);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+}
+
+button.active:hover {
+    background-position: 100% 50%;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(96, 165, 250, 0.7);
+}
+
+button.active:active {
+    transform: scale(0.97);
+}
+
+button.disabled {
+    background: linear-gradient(135deg, #6065fa78, #8c69f47b);
+    color: #ffffff8b;
+    box-shadow: none;
+}

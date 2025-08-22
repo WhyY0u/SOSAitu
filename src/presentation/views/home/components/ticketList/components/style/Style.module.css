@@ -1,0 +1,222 @@
+.ticket_container {
+    width: 100%;
+    display: flex;
+    height: fit-content;
+        flex-direction: column;
+    padding-left: 10px;
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid rgb(229, 229, 229);
+}
+.ticket_line_one {
+    padding-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+.ticket_number {
+    width: fit-content;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-family: Inter;
+    font-size: 12px;
+    border-radius: 10px;
+    color: rgb(87, 87, 87);
+    border: 1px solid rgb(235, 235, 235);
+    background-color: rgb(248, 248, 248);
+}
+
+.ticket_status_name {
+    width: fit-content;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-family: Inter;
+    font-size: 12px;
+    border-radius: 10px;
+    color: rgb(79, 79, 79);
+    border: 1px solid rgb(235, 235, 235);
+    background-color: rgb(248, 248, 248);
+}
+.user_icon {
+    font-size: 18px;
+    font-weight: 200;
+    margin-right: 6px; 
+    color: rgb(188, 188, 188);
+    vertical-align: middle;
+}
+.ticket_name {
+    padding-top: 10px;
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(45,45,45);
+}
+.display {
+    display: flex;
+    padding-top: 10px;
+}
+.ticket_creator_name {
+ font-family: Inter;
+ font-size: 13px;
+ color: rgb(125, 125, 125);
+ transform: translateY(1px);
+}
+.ticket_icon_create_data {
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: 200;
+    margin-right: 6px; 
+    color: rgb(188, 188, 188);
+    vertical-align: middle;
+}
+.ticket_create_data {
+    font-family: Inter;
+    font-size: 13px;
+    color: rgb(125, 125, 125);
+    transform: translateY(1px);
+}
+.ticket_type {
+    font-family: Inter;
+    font-size: 13px;
+    color: rgb(125, 125, 125);
+    transform: translateY(1px);
+}
+.ticket_type_settings {
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: 200;
+    margin-right: 6px; 
+    color: rgb(188, 188, 188);
+    vertical-align: middle;
+}
+.description_text {
+    padding-top: 15px;
+    font-family: Inter;
+    font-size: 13px;
+    color: rgb(67, 67, 67);
+    transform: translateY(1px);
+}
+
+.button {
+    height: 40px;
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: rgb(45,45,45);
+    border-radius: 10px;
+    background-color: rgb(243, 243, 243);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.button_icon {
+    margin-right: 4px;
+    transform: translateY(1px);
+}
+.input_wrapper {
+    padding-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input_with_icon {
+    position: relative;
+    flex: 1;
+}
+
+.message_input {
+    width: 100%;
+    padding: 10px 0px 10px 10px; 
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-family: Inter;
+    font-size: 12px;
+    outline: none;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    box-sizing: border-box;
+    overflow-y: hidden;
+}
+
+.message_input:focus {
+    border-color: #4A90E2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+}
+
+.send_icon {
+    position: absolute;
+    right: 10px; /* отступ справа */
+    bottom: 10px; /* отступ снизу */
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    background-color: #8ec6ff;
+    border-radius: 100%;
+    padding: 5px;
+    transform: rotate(-30deg); 
+}
+
+
+.send_icon:hover {
+    color: #357ABD;
+}
+
+.button_group {
+    display: flex;
+    gap: 10px;
+}
+
+.ticket_margin {
+    display: flex;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.cancel_text,
+.send_message {
+    flex: 1; 
+    text-align: center;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: Inter, sans-serif;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    user-select: none;
+}
+
+.cancel_text {
+    color: white;
+    background: rgb(238, 71, 71);
+    margin-right: 10px;
+}
+
+.cancel_text:hover {
+    background: #E74C3C;
+}
+
+.send_message {
+    color: white;
+    background: rgb(4, 185, 4);
+}
+
+.send_message:hover {
+    background: rgb(3, 160, 3);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.send_message:active {
+    transform: scale(0.97);
+}

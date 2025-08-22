@@ -1,0 +1,20 @@
+.spanExample{
+    font-size: 24px;
+    font-weight: 600;
+}
+.spanBox{
+    display: flex;
+    flex-direction: column;
+     gap: 10px;
+     margin-bottom: 20px;
+}
+
+.textExample{
+    opacity: 50%;
+}
+.boxContainer{
+  justify-content: center;
+  max-width: 500px;
+}
+
+

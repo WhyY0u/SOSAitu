@@ -1,0 +1,11 @@
+.containerDinamic{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: #FFFFFF;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #E5E7EB;
+  font-family: 'Inter', sans-serif;
+  margin-top: 20px;
+}

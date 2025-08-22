@@ -1,18 +1,41 @@
-.containerBox{
-    display: flex;
-    justify-content: space-around;
-    margin-top: 50px;
+.containerBox {
+  display: grid;
+  gap: 20px;
+  margin-top: 50px;
+  grid-template-columns: 1fr; 
 }
 
-.boxCard{
+@media (min-width: 724px) {
+  .containerBox {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .containerBox {
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+  }
+}
+
+.boxCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100px;
+  background-color: #FFFFFF;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #E5E7EB;
+  font-family: 'Inter', sans-serif;
+}
+
+.spanBox{
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100px;
-    background-color: blueviolet;
-    padding: 1rem;
-    border-radius: 0.5rem ;
-    border: 1px solid #E5E7EB;
-    background-color: #FFFFFF;
-    width: 20%;
+    gap: 4px;
+    opacity: 60%;
+}
+
+.spanNumber{
+    font-size: 2rem;
+    
 }

@@ -64,8 +64,6 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
                         </div>
                         <p className={styles.ai_comment_text}>привет да кнч</p>
                     </div>
-
-                    {/* Сообщения */}
                     {!showInput ? (
                         <button className={styles.button} onClick={() => setShowInput(true)}>
                             <FaRegCommentDots className={styles.button_icon} />

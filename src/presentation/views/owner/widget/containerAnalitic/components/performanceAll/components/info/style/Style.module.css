@@ -1,0 +1,14 @@
+.container_info {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 20px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+.text {
+    font-family: Inter;
+    font-size: 14px;
+    white-space: nowrap;
+
+}

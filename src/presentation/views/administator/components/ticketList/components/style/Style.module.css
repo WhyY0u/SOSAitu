@@ -101,6 +101,7 @@
 }
 
 .button {
+    width: 100%;
     height: 40px;
     margin-top: 20px;
     margin-right: 10px;
@@ -222,6 +223,7 @@
 }
 .ai_comment_block {
   margin: 16px 0;
+  margin-right: 10px;
   padding: 14px 16px;
   border-radius: 12px;
   background: linear-gradient(135deg, #f9f9ff, #f3f3f8);
@@ -269,21 +271,21 @@
 }
 
 .expand_button:hover {
-  background: #f1f1f1; /* светло-серый hover */
-  color: #000; /* чуть темнее текст */
+  background: #f1f1f1;
+  color: #000; 
 }
 
 .expand_button:active {
   transform: scale(0.96);
-  background: #e6e6e6; /* при нажатии */
+  background: #e6e6e6; 
 }
 
 .expand_button::after {
-  content: " ▼"; /* маленькая стрелка */
+  content: " ▼"; 
   font-size: 12px;
   transition: transform 0.25s ease;
 }
 
 .expand_button.active::after {
-  transform: rotate(-180deg); /* поворот стрелки вверх */
+  transform: rotate(-180deg); 
 }

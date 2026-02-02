@@ -4,15 +4,17 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { useRef, useState } from 'react';
 import SelectedStatus from '../../selectedStatus/SelectedStatus';
 import type { Ticket } from '@/domain/entities/ticket/Ticket';
-import { ApiTicketRepository } from '@/data/repositories/ticket/remote/ApiTicketRepository';
 import type { User } from '@/domain/entities/user/User';
+import ApiTicketRepository from '@/data/repositories/ticket/remote/ApiTicketRepository';
+import { formatTicketDate } from '@/shared/dateUtils';
 
 interface TicketComponentProps {
     ticket: Ticket;
     user: User;
 }
 
-const TicketComponent = ({ ticket }: TicketComponentProps) => {
+const TicketComponent = ({ user, ticket }: TicketComponentProps) => {
+    console.log(ticket)
     const [localTicket, setLocalTicket] = useState(ticket);
     const [showInput, setShowInput] = useState(false);
     const [message, setMessage] = useState("");
@@ -41,9 +43,9 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
             <p className={`${styles.ticket_name}`}>{localTicket.name}</p>
             <div className={`${styles.display}`}>
                 <FaRegUserCircle className={styles.user_icon} />
-                <p className={`${styles.ticket_creator_name}`}>{localTicket.userCreate.fullName}</p>
+                <p className={`${styles.ticket_creator_name}`}>{user.role == 'User' ? user.fullName : localTicket.userCreate.fullName}</p>
                 <FaRegCalendarAlt className={styles.ticket_icon_create_data} />
-                <p className={`${styles.ticket_create_data}`}>9 августа 2025 г. в 14:00</p>
+                <p className={`${styles.ticket_create_data}`}>{formatTicketDate(ticket.createdTime)}</p>
                 <IoSettingsOutline className={styles.ticket_type_settings} />
                 <p className={`${styles.ticket_type}`}>{localTicket.type}</p>
             </div>
@@ -63,7 +65,7 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
                             <FaRobot className={styles.ai_icon} />
                             <span className={styles.ai_title}>Комментарий от ИИ</span>
                         </div>
-                        <p className={styles.ai_comment_text}>привет да кнч</p>
+                        <p className={styles.ai_comment_text}>{ticket.ai_comments}</p>
                     </div>
                     {!showInput ? (
                         <button className={styles.button} onClick={() => setShowInput(true)}>
@@ -99,8 +101,6 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
                             </p>
                         </div>
                     )}
-
-                    {/* Статус */}
                     <SelectedStatus onUpdate={handleUpdateTicket} ticket={localTicket} />
                 </div>
             )}

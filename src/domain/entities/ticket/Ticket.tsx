@@ -16,7 +16,7 @@ export type Ticket = {
     readonly name: string;
     readonly description: string;
     readonly tags: string[];
-    readonly aiComments: string;       // ai_comments
+    readonly ai_comments: string;       // ai_comments
     readonly status: TicketStatus;     // status
     readonly type: string;             // ticketType теперь просто string
     readonly userCreate: User;

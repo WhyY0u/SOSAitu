@@ -58,7 +58,7 @@ const UserPage = () => {
       <p className={styles.ticket_status}>Создавайте тикеты и отслеживайте их статус</p>
       <ContainerStats counts={counts} />
       {user && <CreateTicket user={user} />}
-      <TicketListComponent list={tickets} /> {/* <-- передаём сохранённые тикеты */}
+      {user && <TicketListComponent user={user} list={tickets} />} 
     </div>
   );
 };

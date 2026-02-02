@@ -1,17 +1,20 @@
-import { useState } from 'react';
 import { MdOutlineAnalytics } from 'react-icons/md';
 import { FaUserShield } from 'react-icons/fa';
 import styles from './style/Style.module.css';
 
-type MenuItem = "analytics" | "admin";
+export type MenuItem = "analytics" | "admin";
 
-const Menu = () => {
-    const [active, setActive] = useState<MenuItem>("analytics");
+interface MenuProps {
+    active: MenuItem;
+    onChange: (value: MenuItem) => void;
+}
+
+const Menu = ({ active, onChange }: MenuProps) => {
 
     return (
         <div className={styles.menu_container}>
             <button
-                onClick={() => setActive("analytics")}
+                onClick={() => onChange("analytics")}
                 className={`${styles.button} ${active === "analytics" ? styles.active : ""}`}
             >
                 <MdOutlineAnalytics style={{ marginRight: "8px" }} />
@@ -19,11 +22,11 @@ const Menu = () => {
             </button>
 
             <button
-                onClick={() => setActive("admin")}
+                onClick={() => onChange("admin")}
                 className={`${styles.button} ${active === "admin" ? styles.active : ""}`}
             >
                 <FaUserShield style={{ marginRight: "8px" }} />
-                Управление Администратором
+                Управление администраторами
             </button>
         </div>
     );

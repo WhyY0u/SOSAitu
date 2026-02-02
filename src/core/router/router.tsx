@@ -5,7 +5,8 @@ import {
   type LazyRouteFunction,
 } from "react-router";
 import { layouts } from "@/presentation/layouts/layoutsMap";
-
+import UserApiRepository from "@/data/repositories/user/remote/ApiUserRepository";
+import type { User } from "@/domain/entities/user/User";
 interface RouteMeta {
   path: string;
   auth?: boolean;
@@ -18,7 +19,6 @@ const metaModules = import.meta.glob<{ default: RouteMeta }>(
   { eager: true }
 );
 
-// Страницы — лениво
 const pageModules = import.meta.glob("@/presentation/views/**/*.page.tsx");
 
 const createLazyRouteFunction = (
@@ -36,18 +36,23 @@ const createLazyRouteFunction = (
           <Component />
         </Layout>
       ),
-      loader: meta.auth
-        ? async () => {
-          const token = localStorage.getItem("token");
-          if (!token) throw redirect("/login");
-
+      loader: async () => {
+          console.log(meta.path);
+          if (meta.path === "/") {
+          const api = new UserApiRepository();
+          const auth: User = await api.getMe();
+          if (auth.fullName != null) {
+            if(auth.role == "User") throw redirect("/user");
+            if(auth.role == "Administrator") throw redirect("/administator");
+            if(auth.role == "Owner") throw redirect("/owner");
+          }
+        }
           const user = JSON.parse(localStorage.getItem("user") || "{}");
           if (meta.roles && !meta.roles.includes(user.role)) {
             throw redirect("/403");
           }
           return null;
-        }
-        : undefined,
+        },
     };
   };
 };

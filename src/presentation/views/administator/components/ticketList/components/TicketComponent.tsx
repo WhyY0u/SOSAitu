@@ -4,10 +4,12 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { useRef, useState } from 'react';
 import SelectedStatus from '../../selectedStatus/SelectedStatus';
 import type { Ticket } from '@/domain/entities/ticket/Ticket';
-import { InMemoryTicketRepository } from '@/data/repositories/ticket/memory/InMemoryTicketRepository';
+import { ApiTicketRepository } from '@/data/repositories/ticket/remote/ApiTicketRepository';
+import type { User } from '@/domain/entities/user/User';
 
 interface TicketComponentProps {
     ticket: Ticket;
+    user: User;
 }
 
 const TicketComponent = ({ ticket }: TicketComponentProps) => {
@@ -22,7 +24,7 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
         el.style.height = `${el.scrollHeight}px`;
         setMessage(e.target.value);
     };
-    const ticketRepository = new InMemoryTicketRepository();
+    const ticketRepository = new ApiTicketRepository();
 
     const handleUpdateTicket = (updatedTicket: Ticket) => {
         ticketRepository.updateTicket(updatedTicket);
@@ -34,16 +36,16 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
         <div className={`${styles.ticket_container}`}>
             <div className={`${styles.ticket_line_one}`}>
                 <p className={`${styles.ticket_number}`}>#{localTicket.id}</p>
-                <p className={`${styles.ticket_status_name}`}>{localTicket.ticketStatus}</p>
+                <p className={`${styles.ticket_status_name}`}>{localTicket.status}</p>
             </div>
             <p className={`${styles.ticket_name}`}>{localTicket.name}</p>
             <div className={`${styles.display}`}>
                 <FaRegUserCircle className={styles.user_icon} />
-                <p className={`${styles.ticket_creator_name}`}>{localTicket.userCreate.fullname}</p>
+                <p className={`${styles.ticket_creator_name}`}>{localTicket.userCreate.fullName}</p>
                 <FaRegCalendarAlt className={styles.ticket_icon_create_data} />
                 <p className={`${styles.ticket_create_data}`}>9 августа 2025 г. в 14:00</p>
                 <IoSettingsOutline className={styles.ticket_type_settings} />
-                <p className={`${styles.ticket_type}`}>{localTicket.ticketType}</p>
+                <p className={`${styles.ticket_type}`}>{localTicket.type}</p>
             </div>
             <p className={`${styles.description_text}`}>{localTicket.description}</p>
 
@@ -56,7 +58,6 @@ const TicketComponent = ({ ticket }: TicketComponentProps) => {
 
             {expanded && (
                 <div className={styles.extra_content}>
-                    {/* Комментарий от AI */}
                     <div className={styles.ai_comment_block}>
                         <div className={styles.ai_comment_header}>
                             <FaRobot className={styles.ai_icon} />

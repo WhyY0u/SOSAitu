@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./style/Style.module.css";
 
 interface CustomDropdownProps {
-    options: string[];
+    options?: string[];
     placeholder?: string;
     onSelect: (value: string) => void;
 }

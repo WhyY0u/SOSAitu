@@ -14,7 +14,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     allowedHosts: [
-      '449ecfda74f4.ngrok-free.app', 
+      'whyy0u.ru', 
     ],
   }
 })

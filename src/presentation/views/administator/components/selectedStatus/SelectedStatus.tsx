@@ -12,26 +12,27 @@ interface Status {
 
 interface SelectedStatusProps {
     ticket: Ticket;
-    onUpdate: (updatedTicket: Ticket) => void;
+    onUpdate: (status: TicketStatus) => void;
 }
 
 const statuses: Status[] = [
-    { value: TicketStatus.New, label: "Новый", icon: <BsClock className={`${styles.image_icon}`} size={19} /> },
-    { value: TicketStatus.In_Progress, label: "В работе", icon: <BiCheckCircle className={`${styles.image_icon}`} size={19} /> },
-    { value: TicketStatus.Closed, label: "Закрыт", icon: <BiXCircle className={`${styles.image_icon}`} size={19} /> },
+    { value: TicketStatus.Expectation, label: "Новый", icon: <BsClock className={`${styles.image_icon}`} size={19} /> },
+    { value: TicketStatus.InProgress, label: "В работе", icon: <BiCheckCircle className={`${styles.image_icon}`} size={19} /> },
+    { value: TicketStatus.Completed, label: "Закрыт", icon: <BiXCircle className={`${styles.image_icon}`} size={19} /> },
 ];
 
 const SelectedStatus = ({ ticket, onUpdate }: SelectedStatusProps) => {
-    const [selected, setSelected] = useState(ticket.ticketStatus);
+    const [selected, setSelected] = useState(ticket.status);
+
     useEffect(() => {
-        if (selected !== ticket.ticketStatus) {
-            const updatedTicket = {
-                ...ticket,
-                ticketStatus: selected
-            };
-            onUpdate(updatedTicket);
+        setSelected(ticket.status);
+    }, [ticket.status]);
+
+    useEffect(() => {
+        if (selected !== ticket.status) {
+            onUpdate(selected);
         }
-    }, [selected]);
+    }, [onUpdate, selected, ticket.status]);
 
     return (
         <div className={styles.status_list}>

@@ -11,6 +11,13 @@ export interface TicketResponse {
   user: User;
 }
 
+export interface UpdateTicketRequest {
+  comment?: string;
+  status?: TicketStatus;
+  ticketId: number;
+}
+
 export interface AdminTicketRepository {
   getTickets(query?: TicketQuery): Promise<{ items: TicketResponse[] }>;
+  updateTicket(request: UpdateTicketRequest): Promise<void>;
 }

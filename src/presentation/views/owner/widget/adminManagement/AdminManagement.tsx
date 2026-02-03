@@ -120,11 +120,12 @@ const AdminManagement = () => {
                         {availableCategories.map((category) => (
                             <label key={category} className={styles.categoryItem}>
                                 <input
+                                    className={styles.categoryCheckbox}
                                     type="checkbox"
                                     checked={selectedCategories.includes(category)}
                                     onChange={() => toggleCategory(category)}
                                 />
-                                <span>{category}</span>
+                                <span className={styles.categoryLabel}>{category}</span>
                             </label>
                         ))}
                     </div>

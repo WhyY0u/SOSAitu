@@ -1,7 +1,5 @@
 import apiClient from '@/data/datasources/api/apiClient';
-import type { Ticket } from '@/domain/entities/ticket/Ticket';
-import type { User } from '@/domain/entities/user/User';
-import type { AdminTicketRepository, TicketQueryAdmin, TicketResponse } from '@/domain/repositories/ticket/AdminTicketRepository';
+import type { AdminTicketRepository, TicketQueryAdmin, TicketResponse, UpdateTicketRequest } from '@/domain/repositories/ticket/AdminTicketRepository';
 
 
 export default class ApiAdminTicketRepository implements AdminTicketRepository {
@@ -19,5 +17,8 @@ export default class ApiAdminTicketRepository implements AdminTicketRepository {
     };
   }
 
-}
+  async updateTicket(request: UpdateTicketRequest): Promise<void> {
+    await apiClient.post('/administator/ticket', request);
+  }
 
+}

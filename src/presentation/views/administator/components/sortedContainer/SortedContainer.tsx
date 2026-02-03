@@ -9,6 +9,8 @@ interface SortedContainerProps {
     onStatusChange: (status: TicketStatusFilter) => void;
     sortBy: SortBy;
     onSortChange: (sort: SortBy) => void;
+    searchQuery: string;
+    onSearchChange: (query: string) => void;
     counts: {
         all: number;
         new: number;
@@ -17,10 +19,10 @@ interface SortedContainerProps {
     };
 }
 
-const SortedContainer = ({ selectedStatus, onStatusChange, sortBy, onSortChange, counts }: SortedContainerProps) => {
+const SortedContainer = ({ selectedStatus, onStatusChange, sortBy, onSortChange, searchQuery, onSearchChange, counts }: SortedContainerProps) => {
     return (
         <div className={styles.sorted_container}>
-            <SearchComponent />
+            <SearchComponent value={searchQuery} onChange={onSearchChange} />
             <SortedClickContainer selected={sortBy} onChange={onSortChange} />
             <SortedStatusContainer selected={selectedStatus} onSelect={onStatusChange} all={counts.all} closed={counts.closed} inProgress={counts.inProgress} newCount={counts.new} />
         </div>

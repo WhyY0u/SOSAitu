@@ -10,6 +10,9 @@ const LoginBox = () => {
     const [groups, setGroups] = useState<string[]>([]);
     const [selected, setSelected] = useState<string[]>([]);
     const userRepo = new UserApiRepository();
+    const trimmedName = name.trim();
+    const isSubmitEnabled = trimmedName.length >= 5 && selected.length > 0;
+
     useEffect(() => {
         userRepo.getAllGroups().then(data => setGroups(data));
         const savedName = localStorage.getItem('name');
@@ -17,9 +20,9 @@ const LoginBox = () => {
     }, []);
 
     const handleLogin = () => {
-        if (name.trim()) {
+        if (isSubmitEnabled) {
             userRepo.setNameAndTypes(name, selected);
-            localStorage.setItem('name', name.trim());
+            localStorage.setItem('name', trimmedName);
             navigate('/user');
         }
     };
@@ -49,8 +52,8 @@ const LoginBox = () => {
 
             <div className={styles.buttons}>
                 <button
-                    className={name.trim() ? styles.active : styles.disabled}
-                    disabled={!name.trim()}
+                    className={isSubmitEnabled ? styles.active : styles.disabled}
+                    disabled={!isSubmitEnabled}
                     onClick={handleLogin}
                 >
                     Вход

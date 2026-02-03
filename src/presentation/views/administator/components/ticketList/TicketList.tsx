@@ -10,20 +10,33 @@ interface TicketResponse {
 }
 
 interface TicketListComponentProps {
-    list: TicketResponse[];
+    list: TicketResponse[] | Ticket[];
+    mode?: 'admin' | 'user';
+    onTicketUpdated?: (ticket: Ticket) => void;
 }
 
-const TicketListComponent = ({ list }: TicketListComponentProps) => {
+const TicketListComponent = ({ list, mode = 'admin', onTicketUpdated }: TicketListComponentProps) => {
     const [tickets, setTickets] = React.useState<TicketResponse[]>([]);
 
     React.useEffect(() => {
-        setTickets(list);
+        const normalizedTickets = list.map((item) => {
+            if ('ticket' in item && 'user' in item) {
+                return item;
+            }
+
+            return {
+                ticket: item,
+                user: item.userCreate,
+            };
+        });
+
+        setTickets(normalizedTickets);
     }, [list]);
 
     return (
         <div className={styles.ticket_list_container}>
             {tickets.map(({ ticket, user }) => (
-                <TicketComponent key={ticket.id} ticket={ticket} user={user} />
+                <TicketComponent key={ticket.id} ticket={ticket} user={user} mode={mode} onTicketUpdated={onTicketUpdated} />
             ))}
         </div>
     );

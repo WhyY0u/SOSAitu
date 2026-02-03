@@ -1,36 +1,79 @@
 import { FaRegCalendarAlt, FaRegCommentDots, FaRegUserCircle, FaRobot } from 'react-icons/fa';
 import styles from './style/Style.module.css'
 import { IoSettingsOutline } from 'react-icons/io5';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import SelectedStatus from '../../selectedStatus/SelectedStatus';
-import type { Ticket } from '@/domain/entities/ticket/Ticket';
+import { type Ticket, type TicketStatus } from '@/domain/entities/ticket/Ticket';
 import type { User } from '@/domain/entities/user/User';
-import ApiTicketRepository from '@/data/repositories/ticket/remote/ApiTicketRepository';
+import ApiAdminTicketRepository from '@/data/repositories/ticket/remote/ApiAdminTicketRepository';
 import { formatTicketDate } from '@/shared/dateUtils';
 
 interface TicketComponentProps {
     ticket: Ticket;
     user: User;
+    mode?: 'admin' | 'user';
+    onTicketUpdated?: (ticket: Ticket) => void;
 }
 
-const TicketComponent = ({ user, ticket }: TicketComponentProps) => {
-    console.log(user)
+const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: TicketComponentProps) => {
     const [localTicket, setLocalTicket] = useState(ticket);
     const [showInput, setShowInput] = useState(false);
     const [message, setMessage] = useState("");
-    const textareaRef = useRef(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [expanded, setExpanded] = useState(false);
-    const handleChange = (e) => {
+    const canManageTicket = mode === 'admin';
+    const [isSaving, setIsSaving] = useState(false);
+    const adminTicketRepository = useMemo(() => new ApiAdminTicketRepository(), []);
+
+    useEffect(() => {
+        setLocalTicket(ticket);
+    }, [ticket]);
+
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const el = textareaRef.current;
+        if (!el) return;
         el.style.height = "auto";
         el.style.height = `${el.scrollHeight}px`;
         setMessage(e.target.value);
     };
-    const ticketRepository = new ApiTicketRepository();
 
-    const handleUpdateTicket = (updatedTicket: Ticket) => {
-        ticketRepository.updateTicket(updatedTicket);
-        setLocalTicket(updatedTicket);
+    const applyTicketUpdate = useCallback(async (payload: { status?: TicketStatus; comment?: string }) => {
+        if (!canManageTicket) return;
+
+        const nextTicket: Ticket = {
+            ...localTicket,
+            status: payload.status ?? localTicket.status,
+            comment: payload.comment ?? localTicket.comment,
+        };
+
+        setIsSaving(true);
+        try {
+            await adminTicketRepository.updateTicket({
+                ticketId: localTicket.id,
+                status: nextTicket.status,
+                comment: nextTicket.comment,
+            });
+            setLocalTicket(nextTicket);
+            onTicketUpdated?.(nextTicket);
+        } catch (error) {
+            console.error('Ошибка обновления тикета администратора:', error);
+        } finally {
+            setIsSaving(false);
+        }
+    }, [adminTicketRepository, canManageTicket, localTicket, onTicketUpdated]);
+
+    const handleUpdateTicketStatus = useCallback((status: TicketStatus) => {
+        if (isSaving) return;
+        void applyTicketUpdate({ status });
+    }, [applyTicketUpdate, isSaving]);
+
+    const handleSendComment = async () => {
+        if (isSaving) return;
+        const nextComment = message.trim();
+        if (!nextComment) return;
+        await applyTicketUpdate({ comment: nextComment });
+        setMessage("");
+        setShowInput(false);
     };
 
 
@@ -60,48 +103,67 @@ const TicketComponent = ({ user, ticket }: TicketComponentProps) => {
 
             {expanded && (
                 <div className={styles.extra_content}>
-                    <div className={styles.ai_comment_block}>
-                        <div className={styles.ai_comment_header}>
-                            <FaRobot className={styles.ai_icon} />
-                            <span className={styles.ai_title}>Комментарий от ИИ</span>
-                        </div>
-                        <p className={styles.ai_comment_text}>{ticket.ai_comments}</p>
-                    </div>
-                    {!showInput ? (
-                        <button className={styles.button} onClick={() => setShowInput(true)}>
-                            <FaRegCommentDots className={styles.button_icon} />
-                            Написать сообщение
-                        </button>
-                    ) : (
-                        <div className={styles.input_wrapper}>
-                            <div className={styles.input_with_icon}>
-                                <textarea
-                                    ref={textareaRef}
-                                    className={styles.message_input}
-                                    placeholder="Введите сообщение..."
-                                    value={message}
-                                    onChange={handleChange}
-                                    rows={1}
-                                />
+                    {mode === 'admin' && localTicket.ai_comments.trim() && (
+                        <div className={styles.ai_comment_block}>
+                            <div className={styles.ai_comment_header}>
+                                <FaRobot className={styles.ai_icon} />
+                                <span className={styles.ai_title}>Комментарий от ИИ</span>
                             </div>
+                            <p className={styles.ai_comment_text}>{localTicket.ai_comments}</p>
                         </div>
                     )}
 
-                    {showInput && (
-                        <div className={styles.ticket_margin} style={{ textAlign: 'right' }}>
-                            <p className={styles.send_message}>Отправить</p>
-                            <p
-                                className={styles.cancel_text}
-                                onClick={() => {
-                                    setMessage("");
-                                    setShowInput(false);
-                                }}
-                            >
-                                Отмена
-                            </p>
+                    {mode === 'user' && localTicket.comment.trim() && (
+                        <div className={styles.ai_comment_block}>
+                            <div className={styles.ai_comment_header}>
+                                <FaRegCommentDots className={styles.ai_icon} />
+                                <span className={styles.ai_title}>Ответ администратора</span>
+                            </div>
+                            <p className={styles.ai_comment_text}>{localTicket.comment}</p>
                         </div>
                     )}
-                    <SelectedStatus onUpdate={handleUpdateTicket} ticket={localTicket} />
+
+                    {canManageTicket && (
+                        <>
+                            {!showInput ? (
+                                <button className={styles.button} onClick={() => setShowInput(true)}>
+                                    <FaRegCommentDots className={styles.button_icon} />
+                                    Написать сообщение
+                                </button>
+                            ) : (
+                                <div className={styles.input_wrapper}>
+                                    <div className={styles.input_with_icon}>
+                                        <textarea
+                                            ref={textareaRef}
+                                            className={styles.message_input}
+                                            placeholder="Введите сообщение..."
+                                            value={message}
+                                            onChange={handleChange}
+                                            rows={1}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {showInput && (
+                                <div className={styles.ticket_margin} style={{ textAlign: 'right' }}>
+                                    <p className={styles.send_message} onClick={handleSendComment}>
+                                        {isSaving ? 'Сохранение...' : 'Отправить'}
+                                    </p>
+                                    <p
+                                        className={styles.cancel_text}
+                                        onClick={() => {
+                                            setMessage("");
+                                            setShowInput(false);
+                                        }}
+                                    >
+                                        Отмена
+                                    </p>
+                                </div>
+                            )}
+                            <SelectedStatus onUpdate={handleUpdateTicketStatus} ticket={localTicket} />
+                        </>
+                    )}
                 </div>
             )}
         </div>

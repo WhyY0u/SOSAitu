@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styles from './style/Style.module.css'
 
 export type SortBy = "date" | "status" | null;
@@ -9,23 +8,21 @@ interface SortedClickContainerProps {
 }
 
 const SortedClickContainer = ({ selected, onChange }: SortedClickContainerProps) => {
-
-
-    const [active, setActive] = useState('date');
-    const handleActive = (value: string) => {
-        setActive(value);
+    const handleActive = (value: SortBy) => {
+        onChange(value);
     };
+
     return <div>
         <div className={styles.sorted_click_container}>
             <button
                 onClick={() => handleActive('date')}
-                className={`${styles.sort_option} ${active == 'date' ? styles.selected : ''}`}
+                className={`${styles.sort_option} ${selected === 'date' ? styles.selected : ''}`}
             >
                 По дате
             </button>
             <button
                 onClick={() => handleActive('status')}
-                className={`${styles.sort_option} ${active == 'status' ? styles.selected : ''}`}
+                className={`${styles.sort_option} ${selected === 'status' ? styles.selected : ''}`}
             >
                 По статусу
             </button>

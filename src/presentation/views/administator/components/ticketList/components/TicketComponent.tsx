@@ -113,7 +113,7 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
                         </div>
                     )}
 
-                    {mode === 'admin' && localTicket.comment.trim() && (
+                    {mode === 'admin' && localTicket.comment && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRegCommentDots className={styles.ai_icon} />
@@ -123,7 +123,7 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
                         </div>
                     )}
 
-                    {mode === 'user' && localTicket.comment.trim() && (
+                    {mode === 'user' && localTicket.comment && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRegCommentDots className={styles.ai_icon} />

@@ -1,25 +1,29 @@
-import type { Ticket } from '@/domain/entities/ticket/Ticket';
-import styles from './style/Style.module.css';
 import React from 'react';
+import styles from './style/Style.module.css';
+import type { Ticket } from '@/domain/entities/ticket/Ticket';
+import type { User } from '@/domain/entities/user/User';
 import TicketComponent from './components/TicketComponent';
-import { type User } from '@/domain/entities/user/User';
 
-interface TicketListComponentProps {
-    list: Ticket[];
-    user : User;
+interface TicketResponse {
+    ticket: Ticket;
+    user: User;
 }
 
-const TicketListComponent = ({ user, list }: TicketListComponentProps) => {
-    const [tickets, setTickets] = React.useState<Ticket[]>([]);
+interface TicketListComponentProps {
+    list: TicketResponse[];
+}
+
+const TicketListComponent = ({ list }: TicketListComponentProps) => {
+    const [tickets, setTickets] = React.useState<TicketResponse[]>([]);
 
     React.useEffect(() => {
-        setTickets(list)
+        setTickets(list);
     }, [list]);
 
     return (
         <div className={styles.ticket_list_container}>
-            {tickets.map(ticket => (
-                <TicketComponent key={ticket.id} user={user} ticket={ticket} />
+            {tickets.map(({ ticket, user }) => (
+                <TicketComponent key={ticket.id} ticket={ticket} user={user} />
             ))}
         </div>
     );

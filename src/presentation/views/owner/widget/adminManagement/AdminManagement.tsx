@@ -20,52 +20,81 @@ const AdminManagement = () => {
     const [fullName, setFullName] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [admins, setAdmins] = useState<AdminRecord[]>([]);
+    const api = useMemo(() => new ApiUserRepository(), []);
 
     useEffect(() => {
-        const loadCategories = async () => {
+        const loadData = async () => {
             try {
-                const api = new ApiUserRepository();
                 const categories = await api.getAllGroups();
                 setAllCategories(categories.length ? categories : fallbackCategories);
+
+                const backendAdmins = await api.getAdministrators();
+                setAdmins(
+                backendAdmins.map(a => ({
+                    id: a.id,
+                    fullName: a.user.fullName ?? '', // если null, заменяем на пустую строку
+                    categories: a.responsible ?? [],
+                }))
+                );
+
             } catch {
                 setAllCategories(fallbackCategories);
             }
         };
+        loadData();
+    }, [api]);
 
-        loadCategories();
-    }, []);
-
-    const availableCategories = useMemo(() => {
-        return allCategories.length ? allCategories : fallbackCategories;
-    }, [allCategories]);
+    const availableCategories = useMemo(() => allCategories.length ? allCategories : fallbackCategories, [allCategories]);
 
     const toggleCategory = (category: string) => {
-        setSelectedCategories((prev) => (
+        setSelectedCategories(prev =>
             prev.includes(category)
                 ? prev.filter((item) => item !== category)
                 : [...prev, category]
-        ));
+        );
     };
 
-    const handleAddAdmin = () => {
+    // Добавление администратора через API
+    const handleAddAdmin = async () => {
         const normalizedName = fullName.trim();
         if (!normalizedName || selectedCategories.length === 0) return;
 
-        setAdmins((prev) => [
-            {
-                id: Date.now(),
-                fullName: normalizedName,
-                categories: selectedCategories,
-            },
-            ...prev,
-        ]);
+        try {
+            // Запрос на бэкенд
+            const response = await api.addAdministrator({
+                id: normalizedName, // Если на бэке ждут ID пользователя
+                types: selectedCategories,
+            });
 
-        setFullName('');
-        setSelectedCategories([]);
+            // Обновляем список из ответа
+            setAdmins(prev => [
+                ...prev,
+                {
+                    id: response.id,
+                    fullName: response.user.fullName ?? '', // заменяем null на ''
+                    categories: response.responsible ?? [],
+                },
+                ]);
+
+
+            setFullName('');
+            setSelectedCategories([]);
+        } catch (err) {
+            console.error('Ошибка при добавлении администратора:', err);
+        }
     };
 
-    const handleDeleteAdmin = (id: number) => {
-        setAdmins((prev) => prev.filter((admin) => admin.id !== id));
+    // Удаление администратора через API
+    const handleDeleteAdmin = async (admin: AdminRecord) => {
+        try {
+            await api.deleteAdministrator({
+                id: admin.id.toString(),
+                types: admin.categories,
+            });
+            setAdmins(prev => prev.filter(a => a.id !== admin.id));
+        } catch (err) {
+            console.error('Ошибка при удалении администратора:', err);
+        }
     };
 
     return (
@@ -75,13 +104,13 @@ const AdminManagement = () => {
                 <p className={styles.subtitle}>Добавьте администратора и назначьте одну или несколько категорий</p>
 
                 <label className={styles.label}>
-                    ФИО администратора
+                    ID администратора
                     <input
                         className={styles.input}
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Например, Анна Иванова"
+                        placeholder="Например, 99831"
                     />
                 </label>
 
@@ -132,7 +161,7 @@ const AdminManagement = () => {
                         <button
                             className={styles.deleteButton}
                             type="button"
-                            onClick={() => handleDeleteAdmin(admin.id)}
+                            onClick={() => handleDeleteAdmin(admin)}
                         >
                             Удалить
                         </button>

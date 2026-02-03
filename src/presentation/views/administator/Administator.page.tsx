@@ -3,36 +3,53 @@ import ContainerStats from './components/containerStats/ContainerStats';
 import SortedContainer from './components/sortedContainer/SortedContainer';
 import TicketListComponent from './components/ticketList/TicketList';
 import { useEffect, useState } from 'react';
-import { InMemoryTicketRepository } from '@/data/repositories/ticket/memory/InMemoryTicketRepository';
 import type { TicketStatusFilter } from './components/sortedStatusContainer/SortedStatusContainer';
 import type { SortBy } from './components/sortedClickContainer/SortedClickContainer';
 import { TicketStatus, type Ticket } from '@/domain/entities/ticket/Ticket';
+import type { User } from '@/domain/entities/user/User';
+import ApiAdminTicketRepository from '@/data/repositories/ticket/remote/ApiAdminTicketRepository';
+import UserApiRepository from '@/data/repositories/user/remote/ApiUserRepository';
+
+// Новый тип для ответа бекенда
+type TicketResponse = {
+    ticket: Ticket;
+    user: User;
+};
 
 type TicketListState = {
-    total: number;
-    items: Ticket[];
+    items: TicketResponse[];
 };
 
 const Home = () => {
     const [selectedStatus, setSelectedStatus] = useState<TicketStatusFilter>("Все");
-    const [sortBy, setSortBy] = useState<SortBy>(null);
-    const ticketRepository = new InMemoryTicketRepository();
-    const [ticketList, setTicketList] = useState<TicketListState>({ total: 0, items: [] });
+    const [sortBy, setSortBy] = useState<SortBy>('date'); 
+    const [ticketList, setTicketList] = useState<TicketListState>({ items: [] });
     const [counts, setCounts] = useState({ all: 0, new: 0, inProgress: 0, closed: 0 });
+    const [authUser, setAuthUser] = useState<User | null>(null);
+
+    const ticketRepository = new ApiAdminTicketRepository();
+    const userRepository = new UserApiRepository();
+
     useEffect(() => {
-        ticketRepository.getTickets({ sortBy: 'date', status: 'Все' }).then(data => {
-            setTicketList(data);
+        userRepository.getMe().then(u => setAuthUser(u));
+    }, []);
+
+    useEffect(() => {
+        if (!authUser) return;
+
+        ticketRepository.getTickets({ sortBy, status: selectedStatus }).then(data => {
+            setTicketList({ items: data.items }); // теперь это TicketResponse[]
+
             const newCounts = data.items.reduce(
-                (acc, ticket) => {
-                    switch (ticket.ticketStatus) {
-                        case TicketStatus.New:
-                            console.log(ticket.ticketStatus)
+                (acc, ticketResp) => {
+                    switch (ticketResp.ticket.status) {
+                        case TicketStatus.Expectation:
                             acc.new += 1;
                             break;
-                        case TicketStatus.In_Progress:
+                        case TicketStatus.InProgress:
                             acc.inProgress += 1;
                             break;
-                        case TicketStatus.Closed:
+                        case TicketStatus.Completed:
                             acc.closed += 1;
                             break;
                     }
@@ -41,35 +58,47 @@ const Home = () => {
                 },
                 { all: 0, new: 0, inProgress: 0, closed: 0 }
             );
+
             setCounts(newCounts);
         });
+    }, [authUser, sortBy, selectedStatus]);
 
-    }, []);
     const handleStatusChange = (status: TicketStatusFilter) => {
         setSelectedStatus(status);
     };
-    useEffect(() => {
-        ticketRepository.getTickets({ sortBy: sortBy, status: selectedStatus }).then(data => {
-            setTicketList(data);
-        });
 
-    }, [sortBy, selectedStatus])
     return (
-        <div className={`${styles.main_container}`}>
-            <p className={`${styles.name}`}>Добро пожаловать,<br /> <span className={`${styles.name_gradient}`}> {localStorage.getItem('name')}!</span></p>
-            <p className={`${styles.ticket_status}`}>Сильный не тот, кто судит, а тот, кто помогает</p>
+        <div className={styles.main_container}>
+            <p className={styles.name}>
+                Добро пожаловать,<br />
+                <span className={styles.name_gradient}>{authUser?.fullName || '...'}</span>
+            </p>
+            <p className={styles.ticket_status}>
+                Сильный не тот, кто судит, а тот, кто помогает
+            </p>
+
             <ContainerStats counts={counts} />
-            <SortedContainer counts={counts} sortBy={sortBy} onSortChange={setSortBy} onStatusChange={handleStatusChange} selectedStatus={selectedStatus} />
-            <div className={`${styles.ticket_list_name}`}>
+
+            <SortedContainer
+                counts={counts}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                onStatusChange={handleStatusChange}
+                selectedStatus={selectedStatus}
+            />
+
+            <div className={styles.ticket_list_name}>
                 <p className={styles.ticket_name}>
                     Тикеты
                     {selectedStatus !== "Все" && (
                         <span className={styles.color_grey}>• {selectedStatus}</span>
                     )}
-                </p>                <p className={`${styles.ticket_count}`}>{ticketList.items.length} из {ticketList.total}</p>
+                </p>
+                <p className={styles.ticket_count}>{ticketList.items.length} из {ticketList.items.length}</p>
             </div>
-            <TicketListComponent list={ticketList.items} />
 
+            {/* Передаем весь TicketResponse в компонент */}
+            {authUser && <TicketListComponent list={ticketList.items} />}
         </div>
     );
 };

@@ -19,6 +19,7 @@ export default class ApiTicketRepository implements TicketRepository {
   })).data;
 }
 
+
   async createTicket(
     user: User,
     ticket: { title: string; description: string; category: string }

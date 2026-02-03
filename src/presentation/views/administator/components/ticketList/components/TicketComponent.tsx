@@ -14,7 +14,7 @@ interface TicketComponentProps {
 }
 
 const TicketComponent = ({ user, ticket }: TicketComponentProps) => {
-    console.log(ticket)
+    console.log(user)
     const [localTicket, setLocalTicket] = useState(ticket);
     const [showInput, setShowInput] = useState(false);
     const [message, setMessage] = useState("");
@@ -43,7 +43,7 @@ const TicketComponent = ({ user, ticket }: TicketComponentProps) => {
             <p className={`${styles.ticket_name}`}>{localTicket.name}</p>
             <div className={`${styles.display}`}>
                 <FaRegUserCircle className={styles.user_icon} />
-                <p className={`${styles.ticket_creator_name}`}>{user.role == 'User' ? user.fullName : localTicket.userCreate.fullName}</p>
+                <p className={`${styles.ticket_creator_name}`}>{user.fullName}</p>
                 <FaRegCalendarAlt className={styles.ticket_icon_create_data} />
                 <p className={`${styles.ticket_create_data}`}>{formatTicketDate(ticket.createdTime)}</p>
                 <IoSettingsOutline className={styles.ticket_type_settings} />

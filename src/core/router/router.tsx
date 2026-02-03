@@ -37,13 +37,13 @@ const createLazyRouteFunction = (
         </Layout>
       ),
       loader: async () => {
-          console.log(meta.path);
           if (meta.path === "/") {
           const api = new UserApiRepository();
           const auth: User = await api.getMe();
-          if (auth.fullName != null) {
+          console.log(auth.role)
+          if (auth.fullName != null && auth.fullName.length > 2) {
             if(auth.role == "User") throw redirect("/user");
-            if(auth.role == "Administrator") throw redirect("/administator");
+            if(auth.role == "Administator") throw redirect("/administator");
             if(auth.role == "Owner") throw redirect("/owner");
           }
         }

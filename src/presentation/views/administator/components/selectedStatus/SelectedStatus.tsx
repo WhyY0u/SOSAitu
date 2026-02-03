@@ -23,6 +23,7 @@ const statuses: Status[] = [
 
 const SelectedStatus = ({ ticket, onUpdate }: SelectedStatusProps) => {
     const [selected, setSelected] = useState(ticket.status);
+    const selectedLabel = statuses.find((status) => status.value === selected)?.label ?? selected;
 
     useEffect(() => {
         setSelected(ticket.status);
@@ -35,18 +36,21 @@ const SelectedStatus = ({ ticket, onUpdate }: SelectedStatusProps) => {
     }, [onUpdate, selected, ticket.status]);
 
     return (
-        <div className={styles.status_list}>
-            {statuses.map((status) => (
-                <button
-                    key={status.value}
-                    onClick={() => setSelected(status.value)}
-                    className={`${styles.status_item} ${selected === status.value ? styles.status_item_selected : ""
-                        }`}
-                >
-                    {status.icon}
-                    <span>{status.label}</span>
-                </button>
-            ))}
+        <div className={styles.status_container}>
+            <p className={styles.current_status}>Текущий статус: {selectedLabel}</p>
+            <div className={styles.status_list}>
+                {statuses.map((status) => (
+                    <button
+                        key={status.value}
+                        onClick={() => setSelected(status.value)}
+                        className={`${styles.status_item} ${selected === status.value ? styles.status_item_selected : ""
+                            }`}
+                    >
+                        {status.icon}
+                        <span>{status.label}</span>
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };

@@ -16,8 +16,6 @@ interface TicketComponentProps {
 }
 
 const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: TicketComponentProps) => {
-    console.log(user);
-    console.log(ticket);
     const [localTicket, setLocalTicket] = useState(ticket);
     const [showInput, setShowInput] = useState(false);
     const [message, setMessage] = useState("");
@@ -115,7 +113,17 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
                         </div>
                     )}
 
-                    {mode === 'user' && localTicket.comment && (
+                    {mode === 'admin' && localTicket.comment.trim() && (
+                        <div className={styles.ai_comment_block}>
+                            <div className={styles.ai_comment_header}>
+                                <FaRegCommentDots className={styles.ai_icon} />
+                                <span className={styles.ai_title}>Комментарий администратора</span>
+                            </div>
+                            <p className={styles.ai_comment_text}>{localTicket.comment}</p>
+                        </div>
+                    )}
+
+                    {mode === 'user' && localTicket.comment.trim() && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRegCommentDots className={styles.ai_icon} />

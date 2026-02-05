@@ -19,9 +19,9 @@ const LoginBox = () => {
         if (savedName) setName(savedName);
     }, []);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (isSubmitEnabled) {
-            userRepo.setNameAndTypes(name, selected);
+            await userRepo.setNameAndTypes(trimmedName, selected);
             localStorage.setItem('name', trimmedName);
             navigate('/user');
         }

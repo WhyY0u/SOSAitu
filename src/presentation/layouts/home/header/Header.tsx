@@ -5,12 +5,24 @@ import { useEffect, useState } from 'react';
 import { type User } from '@/domain/entities/user/User';
 import { FaUserCircle } from "react-icons/fa";
 import UserApiRepository from '@/data/repositories/user/remote/ApiUserRepository';
+
+const roleLabelMap: Record<string, string> = {
+    ROLE_USER: "Пользователь",
+    ROLE_ADMINISTATOR: "Администратор",
+    ROLE_OWNER: "Владелец",
+};
+
 const Header = () => {
     const me = new UserApiRepository();
     const [user, setUser] = useState<User | null>(null);
+
     useEffect(() => {
         me.getMe().then(res => setUser(res));
     }, []);
+
+    const localName = localStorage.getItem("name")?.trim();
+    const displayName = user?.fullName?.trim() || localName || "Пользователь";
+    const displayRole = user?.role ? roleLabelMap[user.role] ?? user.role : "";
 
     return (
         <>
@@ -28,8 +40,8 @@ const Header = () => {
                 <div className={styles.user_info}>
                     <FaUserCircle className={styles.user_icon} />
                     <div className={styles.user_text}>
-                        <p className={styles.user_role}>{user?.role}</p>
-                        <p className={styles.user_id}>ID:{user?.id}</p>
+                        <p className={styles.user_role}>{displayName}</p>
+                        <p className={styles.user_id}>ID: {user?.id ?? "..."}{displayRole ? ` • ${displayRole}` : ""}</p>
                     </div>
                 </div>
             </div>

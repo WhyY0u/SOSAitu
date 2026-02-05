@@ -49,11 +49,14 @@ const UserPage = () => {
     fetchData();
   }, []);
 
+  const localName = localStorage.getItem("name")?.trim();
+  const displayName = user?.fullName?.trim() || localName || "...";
+
   return (
     <div className={styles.main_container}>
       <p className={styles.name}>
         Добро пожаловать,<br />
-        <span className={styles.name_gradient}>{user?.fullName}!</span>
+        <span className={styles.name_gradient}>{displayName}!</span>
       </p>
       <p className={styles.ticket_status}>Создавайте тикеты и отслеживайте их статус</p>
       <ContainerStats counts={counts} />

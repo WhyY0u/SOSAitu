@@ -42,9 +42,9 @@ const createLazyRouteFunction = (
           const auth: User = await api.getMe();
           console.log(auth.role)
           if (auth.fullName != null && auth.fullName.length > 2) {
-            if(auth.role == "User") throw redirect("/user");
-            if(auth.role == "Administator") throw redirect("/administator");
-            if(auth.role == "Owner") throw redirect("/owner");
+            if(auth.role == "ROLE_USER") throw redirect("/user");
+            if(auth.role == "ROLE_ADMINISTATOR") throw redirect("/administator");
+            if(auth.role == "ROLE_OWNER") throw redirect("/owner");
           }
         }
           const user = JSON.parse(localStorage.getItem("user") || "{}");

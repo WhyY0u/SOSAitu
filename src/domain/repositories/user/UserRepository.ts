@@ -13,6 +13,8 @@ export interface StatsResponse {
   avgResponseHours: number;
   usersCount: number;
   countType: TicketCategoryStat[];
+  avgSatisfactionScore: number;
+  problemTicketsCount: number;
 }
 
 
@@ -25,6 +27,8 @@ export interface Administrator {
 export interface AddAdministratorRequest {
   id: string;
   types: string[];
+  regionId?: number;
+  cityId?: number;
 }
 
 
@@ -47,4 +51,5 @@ export interface UserRepository {
   getAdministrators(): Promise<Administrator[]>;
   addAdministrator(request: AddAdministratorRequest): Promise<Administrator>;
   deleteAdministrator(request: AddAdministratorRequest): Promise<string>;
+  getOwnerAiInsights(): Promise<string>;
 }

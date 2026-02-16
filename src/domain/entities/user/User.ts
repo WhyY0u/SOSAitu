@@ -1,6 +1,7 @@
 export const UserRoles = {
   Owner: "ROLE_OWNER",
   Administrator: "ROLE_ADMINISTATOR",
+  Supervisor: "ROLE_SUPERVISOR",
   User: "ROLE_USER",
 } as const;
 

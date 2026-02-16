@@ -22,13 +22,14 @@ export default class ApiTicketRepository implements TicketRepository {
 
   async createTicket(
     user: User,
-    ticket: { title: string; description: string; category: string }
+    ticket: { title: string; description: string; category: string; regionId: number }
   ): Promise<void> {
     if (!user) throw new Error("User is required");
     await apiClient.post("/user/createTicket", {
       name: ticket.title,
       description: ticket.description,
       type: ticket.category,
+      regionId: ticket.regionId,
     });
   }
 

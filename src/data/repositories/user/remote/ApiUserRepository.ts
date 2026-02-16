@@ -34,4 +34,8 @@ export default class UserApiRepository implements UserRepository {
   async getMe(): Promise<User> {
     return (await apiClient.get('/auth/me')).data
   }
+
+  async getOwnerAiInsights(): Promise<string> {
+    return (await apiClient.get('/owner/ai-insights')).data;
+  }
 }

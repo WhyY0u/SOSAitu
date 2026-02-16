@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } f
 import SelectedStatus from '../../selectedStatus/SelectedStatus';
 import { type Ticket, type TicketStatus } from '@/domain/entities/ticket/Ticket';
 import type { User } from '@/domain/entities/user/User';
+import { ApiTicketFeedbackRepository } from '@/data/repositories/ticket/remote/ApiTicketFeedbackRepository';
 import ApiAdminTicketRepository from '@/data/repositories/ticket/remote/ApiAdminTicketRepository';
 import { formatTicketDate } from '@/shared/dateUtils';
 
@@ -24,9 +25,15 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
     const canManageTicket = mode === 'admin';
     const [isSaving, setIsSaving] = useState(false);
     const adminTicketRepository = useMemo(() => new ApiAdminTicketRepository(), []);
+    const feedbackRepository = useMemo(() => new ApiTicketFeedbackRepository(), []);
+    const [feedbackScore, setFeedbackScore] = useState<number | null>(localTicket.satisfactionScore ?? null);
+    const [feedbackComment, setFeedbackComment] = useState(localTicket.satisfactionComment ?? '');
+    const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
     useEffect(() => {
         setLocalTicket(ticket);
+        setFeedbackScore(ticket.satisfactionScore ?? null);
+        setFeedbackComment(ticket.satisfactionComment ?? '');
     }, [ticket]);
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,6 +81,28 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
         await applyTicketUpdate({ comment: nextComment });
         setMessage("");
         setShowInput(false);
+    };
+
+    const handleSendFeedback = async () => {
+        if (mode !== 'user') return;
+        if (!feedbackScore) return;
+        setIsSendingFeedback(true);
+        try {
+            await feedbackRepository.sendFeedback(localTicket.id, {
+                score: feedbackScore,
+                comment: feedbackComment || undefined,
+            });
+
+            setLocalTicket({
+                ...localTicket,
+                satisfactionScore: feedbackScore,
+                satisfactionComment: feedbackComment,
+            });
+        } catch (e) {
+            console.error('Не удалось отправить отзыв по тикету', e);
+        } finally {
+            setIsSendingFeedback(false);
+        }
     };
 
 
@@ -130,6 +159,41 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
                                 <span className={styles.ai_title}>Ответ администратора</span>
                             </div>
                             <p className={styles.ai_comment_text}>{localTicket.comment}</p>
+                        </div>
+                    )}
+
+                    {mode === 'user' && localTicket.status === 'Completed' && (
+                        <div className={styles.feedback_block}>
+                            <div className={styles.ai_comment_header}>
+                                <span className={styles.ai_title}>Оцените ответ</span>
+                            </div>
+                            <div className={styles.feedback_controls}>
+                                <select
+                                    className={styles.feedback_select}
+                                    value={feedbackScore ?? ''}
+                                    onChange={(e) => setFeedbackScore(e.target.value ? Number(e.target.value) : null)}
+                                >
+                                    <option value="">Выберите оценку</option>
+                                    {[1, 2, 3, 4, 5].map((s) => (
+                                        <option key={s} value={s}>
+                                            {s}
+                                        </option>
+                                    ))}
+                                </select>
+                                <textarea
+                                    className={styles.feedback_textarea}
+                                    placeholder="Оставьте комментарий (необязательно)"
+                                    value={feedbackComment}
+                                    onChange={(e) => setFeedbackComment(e.target.value)}
+                                />
+                                <button
+                                    className={styles.button}
+                                    disabled={!feedbackScore || isSendingFeedback}
+                                    onClick={handleSendFeedback}
+                                >
+                                    {isSendingFeedback ? 'Отправка...' : 'Отправить отзыв'}
+                                </button>
+                            </div>
                         </div>
                     )}
 

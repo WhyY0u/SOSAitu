@@ -14,3 +14,28 @@
     font-family: Inter;
     text-align: center;
 }
+
+.ai_insights_container {
+    margin: 24px auto;
+    max-width: 960px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: #050816;
+    color: #e5e7eb;
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.6);
+}
+
+.ai_insights_title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.ai_insights_text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-line;
+}

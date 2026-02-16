@@ -10,6 +10,7 @@ const Owner = () => {
     const [activeSection, setActiveSection] = useState<MenuItem>("analytics");
     const [stats, setStats] = useState<StatsResponse | null>(null);
     const [admins, setAdmins] = useState<AdminPerformanceDto[]>([]);
+    const [aiInsights, setAiInsights] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +21,9 @@ const Owner = () => {
                 setStats(statsData);
                 const adminsData = await api.getAdminPerformance();
                 setAdmins(adminsData);
+
+                const insights = await api.getOwnerAiInsights();
+                setAiInsights(insights);
 
             } catch (err) {
                 console.error("Ошибка при загрузке статистики:", err);
@@ -34,6 +38,13 @@ const Owner = () => {
             <p className={`${styles.text_one}`}>Панель управление Владельца</p>
             <p className={`${styles.text_two}`}>Полная аналитика и управление системой SOSAitu</p>
             <Menu active={activeSection} onChange={setActiveSection} />
+
+            {activeSection === "analytics" && aiInsights && (
+                <div className={styles.ai_insights_container}>
+                    <p className={styles.ai_insights_title}>Выводы ИИ по текущей ситуации</p>
+                    <p className={styles.ai_insights_text}>{aiInsights}</p>
+                </div>
+            )}
 
             {activeSection === "analytics" && stats && (
                 <ContainerAnilition admins={admins} stats={stats} />

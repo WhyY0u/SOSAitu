@@ -22,4 +22,6 @@ export type Ticket = {
     readonly userCreate: User;
     readonly moderator?: User;
     readonly comment: string;
+    readonly satisfactionScore?: number;
+    readonly satisfactionComment?: string;
 };

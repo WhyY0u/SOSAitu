@@ -1,4 +1,4 @@
-import { FaClock, FaEnvelopeOpenText, FaUsers, FaUserShield } from 'react-icons/fa';
+import { FaClock, FaEnvelopeOpenText, FaUsers, FaUserShield, FaExclamationTriangle, FaSmile } from 'react-icons/fa';
 import Stats from './components/stats/Stats';
 import styles from './style/Style.module.css'
 
@@ -8,6 +8,8 @@ interface StatsData {
   adminsCount: number;
   avgResponseHours: number;
   usersCount: number;
+  avgSatisfactionScore: number;
+  problemTicketsCount: number;
 }
 
 interface AllStatsProps {
@@ -19,11 +21,11 @@ const AllStats = ({ stats }: AllStatsProps) => {
         <div className={`${styles.container_all_stats}`}>
 
             <Stats
-                bigText={stats.usersCount.toString()}
-                name='Всего обращений'
-                description='за месяц'
-                icon={<FaEnvelopeOpenText size={24} />}
-            />
+        bigText={stats.monthTickets.toString()}
+        name='Всего обращений'
+        description='за месяц'
+        icon={<FaEnvelopeOpenText size={24} />}
+      />
 
             <Stats
                 bigText={stats.adminsCount.toString()}
@@ -44,6 +46,20 @@ const AllStats = ({ stats }: AllStatsProps) => {
                 name='Пользователей'
                 description='зарегистрировано'
                 icon={<FaUsers size={24} />}
+            />
+
+            <Stats
+                bigText={stats.avgSatisfactionScore.toFixed(1)}
+                name='Средняя оценка'
+                description='удовлетворенности заявителей'
+                icon={<FaSmile size={24} />}
+            />
+
+            <Stats
+                bigText={stats.problemTicketsCount.toString()}
+                name='Проблемных обращений'
+                description='просроченные и без ответа'
+                icon={<FaExclamationTriangle size={24} />}
             />
 
         </div>

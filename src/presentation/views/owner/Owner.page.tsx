@@ -3,6 +3,8 @@ import Menu, { type MenuItem } from './components/menu/Menu';
 import styles from './style/Style.module.css';
 import ContainerAnilition from './widget/containerAnalitic/ContainerAnalitic';
 import AdminManagement from './widget/adminManagement/AdminManagement';
+import LocationManagement from './widget/locationManagement/LocationManagement';
+import MonthlyReport from './widget/monthlyReport/MonthlyReport';
 import UserApiRepository from '@/data/repositories/user/remote/ApiUserRepository';
 import type { AdminPerformanceDto, StatsResponse } from '@/domain/repositories/user/UserRepository';
 
@@ -11,6 +13,7 @@ const Owner = () => {
     const [stats, setStats] = useState<StatsResponse | null>(null);
     const [admins, setAdmins] = useState<AdminPerformanceDto[]>([]);
     const [aiInsights, setAiInsights] = useState<string>('');
+    const [monthlyReport, setMonthlyReport] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,6 +27,9 @@ const Owner = () => {
 
                 const insights = await api.getOwnerAiInsights();
                 setAiInsights(insights);
+
+                const report = await api.getOwnerMonthlyReport();
+                setMonthlyReport(report);
 
             } catch (err) {
                 console.error("Ошибка при загрузке статистики:", err);
@@ -50,7 +56,12 @@ const Owner = () => {
                 <ContainerAnilition admins={admins} stats={stats} />
             )}
 
+            {activeSection === "report" && monthlyReport && (
+                <MonthlyReport report={monthlyReport} />
+            )}
+
             {activeSection === "admin" && <AdminManagement />}
+            {activeSection === "locations" && <LocationManagement />}
         </div>
     );
 };

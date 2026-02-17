@@ -3,25 +3,17 @@ import { FaUserCircle, FaUser } from 'react-icons/fa';
 import styles from './styles/Style.module.css';
 import { useNavigate } from 'react-router';
 import UserApiRepository from './../../../../../data/repositories/user/remote/ApiUserRepository'
-import DropDownMenu from '../dropDownMenu/DropDownMenu';
+
 const LoginBox = () => {
     const [name, setName] = useState('');
     const navigate = useNavigate();
-    const [groups, setGroups] = useState<string[]>([]);
-    const [selected, setSelected] = useState<string[]>([]);
     const userRepo = new UserApiRepository();
     const trimmedName = name.trim();
-    const isSubmitEnabled = trimmedName.length >= 5 && selected.length > 0;
-
-    useEffect(() => {
-        userRepo.getAllGroups().then(data => setGroups(data));
-        const savedName = localStorage.getItem('name');
-        if (savedName) setName(savedName);
-    }, []);
+    const isSubmitEnabled = trimmedName.length >= 5;
 
     const handleLogin = async () => {
         if (isSubmitEnabled) {
-            await userRepo.setNameAndTypes(trimmedName, selected);
+            await userRepo.setName(trimmedName);
             localStorage.setItem('name', trimmedName);
             navigate('/user');
         }
@@ -43,12 +35,6 @@ const LoginBox = () => {
                     onChange={(e) => setName(e.target.value)}
                 />
             </div>
-            <DropDownMenu
-                options={groups}
-                placeholder="Выберите группы, к которой относитесь"
-                onSelect={(value) => setSelected(Array.isArray(value) ? value : [value])}
-                multiple={true}
-            />
 
             <div className={styles.buttons}>
                 <button

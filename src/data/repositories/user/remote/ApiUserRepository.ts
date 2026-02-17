@@ -22,9 +22,9 @@ export default class UserApiRepository implements UserRepository {
  async ownerStats(): Promise<StatsResponse> {
   return (await apiClient.get('/owner/stats')).data;
 }
- 
-  async setNameAndTypes(name: string, groups: string[]): Promise<void> {
-    return apiClient.post('/auth/setname', { name, groups });
+
+  async setName(name: string): Promise<void> {
+    return apiClient.post('/auth/setname', { name });
   }
 
   async getAllGroups(): Promise<string[]> {
@@ -37,5 +37,9 @@ export default class UserApiRepository implements UserRepository {
 
   async getOwnerAiInsights(): Promise<string> {
     return (await apiClient.get('/owner/ai-insights')).data;
+  }
+
+  async getOwnerMonthlyReport(): Promise<string> {
+    return (await apiClient.get('/owner/monthly-report')).data;
   }
 }

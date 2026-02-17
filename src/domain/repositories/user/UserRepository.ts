@@ -44,7 +44,7 @@ export interface AdminPerformanceDto {
 
 export interface UserRepository {
   getMe(): Promise<User>;
-  setNameAndTypes(name: string, groups: string[]): Promise<void>;
+  setName(name: string): Promise<void>;
   getAllGroups(): Promise<string[]>;
   ownerStats(): Promise<StatsResponse>
   getAdminPerformance(): Promise<AdminPerformanceDto[]>;
@@ -52,4 +52,5 @@ export interface UserRepository {
   addAdministrator(request: AddAdministratorRequest): Promise<Administrator>;
   deleteAdministrator(request: AddAdministratorRequest): Promise<string>;
   getOwnerAiInsights(): Promise<string>;
+  getOwnerMonthlyReport(): Promise<string>;
 }

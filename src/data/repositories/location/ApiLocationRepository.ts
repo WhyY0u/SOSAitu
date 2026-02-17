@@ -19,5 +19,9 @@ export class ApiLocationRepository {
   async getCities(regionId: number): Promise<City[]> {
     return (await apiClient.get(`/location/regions/${regionId}/cities`)).data;
   }
+
+  async getAllCities(): Promise<City[]> {
+    return (await apiClient.get("/location/cities")).data;
+  }
 }
 

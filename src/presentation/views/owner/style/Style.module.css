@@ -1,18 +1,38 @@
 .main_container {
     width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 .text_one {
-    padding-top: 30px;
+    padding: 30px 16px 10px;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
     line-height: 1.3;
 }
+
+@media (min-width: 768px) {
+    .text_one {
+        font-size: 24px;
+        padding: 30px 20px 10px;
+    }
+}
+
 .text_two {
     font-family: Inter;
     text-align: center;
+    padding: 0 16px;
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    .text_two {
+        font-size: 15px;
+        padding: 0 20px;
+    }
 }
 
 .ai_insights_container {
@@ -29,13 +49,25 @@
 .ai_insights_title {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+    .ai_insights_title {
+        font-size: 18px;
+    }
 }
 
 .ai_insights_text {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.6;
     white-space: pre-line;
+}
+
+@media (min-width: 768px) {
+    .ai_insights_text {
+        font-size: 14px;
+    }
 }

@@ -1,7 +1,9 @@
 export const UserRoles = {
   Owner: "ROLE_OWNER",
-  Administrator: "ROLE_ADMINISTATOR",
   Supervisor: "ROLE_SUPERVISOR",
+  RegionAdministrator: "ROLE_REGION_ADMINISTRATOR",
+  CityAdministrator: "ROLE_CITY_ADMINISTRATOR",
+  Support: "ROLE_SUPPORT",
   User: "ROLE_USER",
 } as const;
 
@@ -13,6 +15,5 @@ export type User = {
   readonly telegramId: string;
   readonly chatID: string;
   readonly banned: boolean;
-  readonly groups: string[];
   readonly role: UserRole;
 };

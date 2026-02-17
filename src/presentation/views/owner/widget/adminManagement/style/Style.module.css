@@ -138,6 +138,58 @@
   font-weight: 700;
 }
 
+.adminRole {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.roleBadge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.roleBadge.supervisor {
+  background: #e8ecff;
+  color: #5566ff;
+}
+
+.roleBadge.region_administrator {
+  background: #f3e8ff;
+  color: #a855f7;
+}
+
+.roleBadge.city_administrator {
+  background: #dcfce7;
+  color: #22c55e;
+}
+
+.roleBadge.support {
+  background: #e0f2fe;
+  color: #0ea5e9;
+}
+
+.regionBadge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f0f0f0;
+  color: #666;
+  font-weight: 500;
+}
+
+.cityBadge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #fef3c7;
+  color: #d97706;
+  font-weight: 500;
+}
+
 .badges {
   display: flex;
   flex-wrap: wrap;

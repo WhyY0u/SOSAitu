@@ -2,7 +2,6 @@ import type { AdminPerformanceDto, StatsResponse } from '@/domain/repositories/u
 import AllCategory from './components/allCategory/AllCategory';
 import AllCategoryProcent from './components/allCategoryProcent/AllCategoryProcent';
 import AllStats from './components/allStats/AllStats';
-import PerformanceAll from './components/performanceAll/PerformanceAll';
 import styles from './style/Style.module.css'
 
 interface ContainerAnilitionProps {
@@ -16,7 +15,6 @@ const ContainerAnilition = ({ admins, stats }: ContainerAnilitionProps) => {
       <AllStats stats={stats} />
       <AllCategory countType={stats.countType} />
       <AllCategoryProcent countType={stats.countType} />
-      <PerformanceAll admins={admins} />
     </div>
   );
 };

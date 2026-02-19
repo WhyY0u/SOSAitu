@@ -1,0 +1,760 @@
+.main_container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.text_one {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.text_two {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.menu {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.menu_button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.menu_button:hover {
+    background: #f9fafb;
+}
+
+.menu_button.active {
+    background: #059669;
+    color: white;
+    border-color: #059669;
+}
+
+.analytics_card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+.card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.analytics_title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #1f2937;
+}
+
+.analytics_subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+
+.ai_button {
+    padding: 10px 20px;
+    background: #059669;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai_button:hover:not(.disabled) {
+    background: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.ai_button.disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.empty_state {
+    padding: 40px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.no_cities {
+    padding: 12px 16px;
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    color: #92400e;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stats_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat_card {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+}
+
+.stat_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-color: #059669;
+}
+
+.stat_icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.stat_label {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.stat_value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.category_stats {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+.category_title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #1f2937;
+}
+
+.category_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.category_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+}
+
+.category_item:hover {
+    border-color: #059669;
+    background: #f0fdf4;
+}
+
+.category_name {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.category_count {
+    font-size: 18px;
+    font-weight: 700;
+    color: #059669;
+    background: #d1fae5;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.admins_list {
+    margin-top: 16px;
+}
+
+/* Статистика по городам */
+.cities_stats_section {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.cities_stats_title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+.cities_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.city_stat_card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.city_stat_card:hover {
+    border-color: #059669;
+    box-shadow: 0 8px 16px rgba(5, 150, 105, 0.15);
+    transform: translateY(-2px);
+}
+
+.city_stat_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.city_stat_icon {
+    font-size: 24px;
+}
+
+.city_stat_name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.city_stat_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.city_stat_item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.city_stat_label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.city_stat_value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.city_stat_value_problem {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ef4444;
+}
+
+.city_stat_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.city_stat_satisfaction {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.city_stat_view_more {
+    font-size: 13px;
+    color: #059669;
+    font-weight: 500;
+}
+
+/* Детальная статистика по городу */
+.city_detail_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.city_detail_title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #1f2937;
+}
+
+.close_button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.close_button:hover {
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+.city_detail_stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.city_detail_stat {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.city_detail_label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.city_detail_value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.city_detail_value_problem {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ef4444;
+}
+
+.city_detail_categories {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.city_detail_categories_title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    color: #1f2937;
+}
+
+.city_detail_categories_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.city_detail_category_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.city_detail_category_name {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.city_detail_category_count {
+    font-size: 16px;
+    font-weight: 700;
+    color: #059669;
+    background: #d1fae5;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.admin_item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #f9fafb;
+}
+
+.admin_item:last-child {
+    border-bottom: none;
+}
+
+.admin_name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.admin_city {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.admin_stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.admin_category {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+.admin_actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.delete_button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #ef4444;
+    background: white;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.delete_button:hover {
+    background: #fef2f2;
+}
+
+.add_button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    background: #059669;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    margin-top: 16px;
+    align-self: flex-start;
+}
+
+.add_button:hover {
+    background: #047857;
+}
+
+.status_online {
+    color: #059669;
+    font-weight: 600;
+}
+
+.status_offline {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal_content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal_title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.form_group {
+    margin-bottom: 16px;
+}
+
+.form_label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.form_select,
+.form_input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    background: white;
+}
+
+.form_select:focus,
+.form_input:focus {
+    outline: none;
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.checkbox_group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #f9fafb;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.checkbox_label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal_actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel_button {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.submit_button {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    background: #059669;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.empty_state {
+    text-align: center;
+    padding: 48px 24px;
+    color: #9ca3af;
+}
+
+.ai_report {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2937;
+}
+
+.ai_report_title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #166534;
+}
+
+.ai_report_content h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 16px 0 8px 0;
+    color: #166534;
+}
+
+.ai_report_content h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 12px 0 6px 0;
+    color: #15803d;
+}
+
+.ai_report_content ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.ai_report_content li {
+    margin: 4px 0;
+    list-style-type: disc;
+}
+
+.ai_report_content strong {
+    font-weight: 600;
+    color: #166534;
+}
+
+.ai_report_content p {
+    margin: 8px 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .main_container {
+        padding: 16px;
+    }
+
+    .text_one {
+        font-size: 22px;
+    }
+
+    .text_two {
+        font-size: 14px;
+    }
+
+    .menu {
+        gap: 8px;
+    }
+
+    .menu_button {
+        min-width: auto;
+        flex: 1 1 45%;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .stats_grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat_card {
+        padding: 12px;
+    }
+
+    .stat_label {
+        font-size: 11px;
+    }
+
+    .stat_value {
+        font-size: 18px;
+    }
+
+    .analytics_card {
+        padding: 16px;
+    }
+
+    .analytics_title {
+        font-size: 18px;
+    }
+
+    .admin_item {
+        padding: 12px;
+    }
+
+    .admin_name {
+        font-size: 14px;
+    }
+
+    .admin_stats {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .modal_content {
+        padding: 16px;
+    }
+
+    .modal_actions {
+        flex-direction: column;
+    }
+}

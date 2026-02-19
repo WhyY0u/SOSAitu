@@ -10,6 +10,9 @@ const roleLabelMap: Record<string, string> = {
     ROLE_USER: "Пользователь",
     ROLE_ADMINISTATOR: "Администратор",
     ROLE_OWNER: "Владелец",
+    ROLE_OBLASTI_ADMINISTATOR: "Администратор Области",
+    ROLE_CITY_ADMINISTRATOR: "Администратор Города",
+    ROLE_SUPPORT: "Поддержка",
 };
 
 const Header = () => {

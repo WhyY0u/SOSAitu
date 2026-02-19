@@ -7,12 +7,13 @@ import { type Ticket, type TicketStatus } from '@/domain/entities/ticket/Ticket'
 import type { User } from '@/domain/entities/user/User';
 import { ApiTicketFeedbackRepository } from '@/data/repositories/ticket/remote/ApiTicketFeedbackRepository';
 import ApiAdminTicketRepository from '@/data/repositories/ticket/remote/ApiAdminTicketRepository';
+import ApiSupportTicketRepository from '@/data/repositories/support/remote/ApiSupportTicketRepository';
 import { formatTicketDate } from '@/shared/dateUtils';
 
 interface TicketComponentProps {
     ticket: Ticket;
     user: User;
-    mode?: 'admin' | 'user';
+    mode?: 'admin' | 'user' | 'support';
     onTicketUpdated?: (ticket: Ticket) => void;
 }
 
@@ -22,13 +23,19 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
     const [message, setMessage] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [expanded, setExpanded] = useState(false);
-    const canManageTicket = mode === 'admin';
+    const canManageTicket = mode === 'admin' || mode === 'support';
     const [isSaving, setIsSaving] = useState(false);
     const adminTicketRepository = useMemo(() => new ApiAdminTicketRepository(), []);
+    const supportTicketRepository = useMemo(() => new ApiSupportTicketRepository(), []);
     const feedbackRepository = useMemo(() => new ApiTicketFeedbackRepository(), []);
     const [feedbackScore, setFeedbackScore] = useState<number | null>(localTicket.satisfactionScore ?? null);
     const [feedbackComment, setFeedbackComment] = useState(localTicket.satisfactionComment ?? '');
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+    
+    // Защита от undefined user
+    if (!user) {
+        return null;
+    }
 
     useEffect(() => {
         setLocalTicket(ticket);
@@ -55,19 +62,27 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
 
         setIsSaving(true);
         try {
-            await adminTicketRepository.updateTicket({
-                ticketId: localTicket.id,
-                status: nextTicket.status,
-                comment: nextTicket.comment,
-            });
+            if (mode === 'support') {
+                await supportTicketRepository.updateTicket({
+                    ticketId: localTicket.id,
+                    status: nextTicket.status,
+                    comment: nextTicket.comment,
+                });
+            } else {
+                await adminTicketRepository.updateTicket({
+                    ticketId: localTicket.id,
+                    status: nextTicket.status,
+                    comment: nextTicket.comment,
+                });
+            }
             setLocalTicket(nextTicket);
             onTicketUpdated?.(nextTicket);
         } catch (error) {
-            console.error('Ошибка обновления тикета администратора:', error);
+            console.error('Ошибка обновления тикета:', error);
         } finally {
             setIsSaving(false);
         }
-    }, [adminTicketRepository, canManageTicket, localTicket, onTicketUpdated]);
+    }, [adminTicketRepository, supportTicketRepository, canManageTicket, localTicket, mode, onTicketUpdated]);
 
     const handleUpdateTicketStatus = useCallback((status: TicketStatus) => {
         if (isSaving) return;

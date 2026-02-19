@@ -37,18 +37,22 @@ const createLazyRouteFunction = (
         </Layout>
       ),
       loader: async () => {
-          if (meta.path === "/") {
           const api = new UserApiRepository();
           const auth: User = await api.getMe();
-          console.log(auth.role)
-          if (auth.fullName != null && auth.fullName.length > 2) {
-            if(auth.role == "ROLE_USER") throw redirect("/user");
-            if(auth.role == "ROLE_ADMINISTATOR") throw redirect("/administator");
-            if(auth.role == "ROLE_OWNER") throw redirect("/owner");
+          
+          if (meta.path === "/") {
+            if (auth.fullName != null && auth.fullName.length > 2) {
+              if(auth.role == "ROLE_USER") throw redirect("/user");
+              if(auth.role == "ROLE_ADMINISTATOR") throw redirect("/administator");
+              if(auth.role == "ROLE_OWNER") throw redirect("/owner");
+              if(auth.role == "ROLE_OBLASTI_ADMINISTATOR") throw redirect("/region-admin");
+              if(auth.role == "ROLE_CITY_ADMINISTRATOR") throw redirect("/city-admin");
+              if(auth.role == "ROLE_SUPERVISOR") throw redirect("/supervisor");
+              if(auth.role == "ROLE_SUPPORT") throw redirect("/support");
+            }
           }
-        }
-          const user = JSON.parse(localStorage.getItem("user") || "{}");
-          if (meta.roles && !meta.roles.includes(user.role)) {
+          
+          if (meta.roles && !meta.roles.includes(auth.role)) {
             throw redirect("/403");
           }
           return null;

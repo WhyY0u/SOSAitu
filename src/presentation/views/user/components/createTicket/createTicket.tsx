@@ -2,18 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import styles from './style/Style.module.css';
 import type { User } from '@/domain/entities/user/User';
 import ApiTicketRepository from '@/data/repositories/ticket/remote/ApiTicketRepository';
-import { ApiLocationRepository, type Region, type City } from '@/data/repositories/location/ApiLocationRepository';
+import { ApiLocationRepository, type City } from '@/data/repositories/location/ApiLocationRepository';
 
 interface CreateTicketProps {
     user: User;
+    onTicketCreated?: (ticket: any) => void;
 };
 
-const CreateTicket = ({ user }: CreateTicketProps) => {
+const CreateTicket = ({ user, onTicketCreated }: CreateTicketProps) => {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [regions, setRegions] = useState<Region[]>([]);
     const [cities, setCities] = useState<City[]>([]);
-    const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
     const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,36 +27,18 @@ const CreateTicket = ({ user }: CreateTicketProps) => {
         selectedCityId !== null;
 
     useEffect(() => {
-        const loadRegions = async () => {
-            try {
-                const response = await locationRepository.getRegions();
-                console.log('Loaded regions:', response);
-                const regionsData = Array.isArray(response) ? response : [];
-                setRegions(regionsData);
-            } catch (e) {
-                console.error("Не удалось загрузить регионы", e);
-                setRegions([]);
-            }
-        };
-        void loadRegions();
-    }, [locationRepository]);
-
-    useEffect(() => {
         const loadCities = async () => {
-            if (selectedRegionId) {
-                try {
-                    const allCities = await locationRepository.getCities(selectedRegionId);
-                    setCities(allCities);
-                    setSelectedCityId(null);
-                } catch (e) {
-                    console.error("Не удалось загрузить города", e);
-                }
-            } else {
+            try {
+                // Загружаем города только для Павлодарской области (id=15)
+                const allCities = await locationRepository.getCities(15);
+                setCities(allCities);
+            } catch (e) {
+                console.error("Не удалось загрузить города", e);
                 setCities([]);
             }
         };
         void loadCities();
-    }, [selectedRegionId, locationRepository]);
+    }, [locationRepository]);
 
     const handleSubmit = async () => {
         if (!isFormValid) return;
@@ -69,17 +50,22 @@ const CreateTicket = ({ user }: CreateTicketProps) => {
         try {
             const api = new ApiTicketRepository();
 
-            await api.createTicket(user, {
+            const createdTicket = await api.createTicket(user, {
                 title,
                 description,
                 cityId: selectedCityId!,
             });
+            
             setSuccess(true);
             setTitle('');
             setDescription('');
-            setSelectedRegionId(null);
             setSelectedCityId(null);
             setCities([]);
+            
+            // Уведомляем родительский компонент о создании тикета
+            if (onTicketCreated && createdTicket) {
+                onTicketCreated(createdTicket);
+            }
         } catch (err: any) {
             setError(err.message || 'Произошла ошибка при создании тикета');
         } finally {
@@ -120,42 +106,22 @@ const CreateTicket = ({ user }: CreateTicketProps) => {
             </label>
 
             <label className={styles.label}>
-                <p className={styles.label_text}>Регион</p>
+                <p className={styles.label_text}>Города/районы</p>
                 <select
                     className={styles.input}
-                    value={selectedRegionId ?? ''}
+                    value={selectedCityId ?? ''}
                     onChange={(e) =>
-                        setSelectedRegionId(e.target.value ? Number(e.target.value) : null)
+                        setSelectedCityId(e.target.value ? Number(e.target.value) : null)
                     }
                 >
-                    <option value="">Выберите регион...</option>
-                    {regions.map((region) => (
-                        <option key={region.id} value={region.id}>
-                            {region.name}
+                    <option value="">Выберите город/район...</option>
+                    {cities.map((city) => (
+                        <option key={city.id} value={city.id}>
+                            {city.name}
                         </option>
                     ))}
                 </select>
             </label>
-
-            {selectedRegionId && cities.length > 0 && (
-                <label className={styles.label}>
-                    <p className={styles.label_text}>Город</p>
-                    <select
-                        className={styles.input}
-                        value={selectedCityId ?? ''}
-                        onChange={(e) =>
-                            setSelectedCityId(e.target.value ? Number(e.target.value) : null)
-                        }
-                    >
-                        <option value="">Выберите город...</option>
-                        {cities.map((city) => (
-                            <option key={city.id} value={city.id}>
-                                {city.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-            )}
 
             {error && <p className={styles.error}>{error}</p>}
             {success && <p className={styles.success}>Тикет успешно создан!</p>}

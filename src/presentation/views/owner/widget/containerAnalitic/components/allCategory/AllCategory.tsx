@@ -22,7 +22,6 @@ const colors = [
   '#8B5CF6', // OTHER
 ];
 
-
 const AllCategory = ({ countType }: AllCategoryProps) => {
   const sortedData = [...countType].sort((a, b) => b.count - a.count);
 
@@ -34,10 +33,15 @@ const AllCategory = ({ countType }: AllCategoryProps) => {
       </div>
       <p className={styles.subtitle}>Распределение обращений по направлениям</p>
 
-      <div className={styles.chartWrapper}>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={sortedData} margin={{ top: 10, right: 20, left: 0, bottom: 30 }}>
-            <XAxis dataKey="type" tick={{ fontSize: 12 }} />
+      <div className={styles.chart_container}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={sortedData} margin={{ top: 10, right: 10, left: -10, bottom: 60 }}>
+            <XAxis 
+              dataKey="type" 
+              tick={{ fontSize: 11, angle: -45, textAnchor: 'end' }}
+              interval={0}
+              height={50}
+            />
             <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
             <Bar dataKey="count" radius={[10, 10, 0, 0]}>

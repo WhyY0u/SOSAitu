@@ -1,8 +1,23 @@
 .container_all_stats {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px; 
-  margin: 10px auto; 
-  max-width: 600px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 10px auto;
+  max-width: 800px;
   justify-content: center;
+  padding: 0 16px;
+}
+
+@media (max-width: 480px) {
+  .container_all_stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container_all_stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
 }

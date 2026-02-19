@@ -11,7 +11,7 @@ import TicketListComponent from '../administator/components/ticketList/TicketLis
 const UserPage = () => {
   const [counts, setCounts] = useState({ all: 0, new: 0, inProgress: 0, closed: 0 });
   const [user, setUser] = useState<User | null>(null);
-  const [tickets, setTickets] = useState<Ticket[]>([]); // <-- здесь сохраняем тикеты
+  const [tickets, setTickets] = useState<{ticket: Ticket, user: User}[]>([]);
 
   const ticketRepository = new ApiTicketRepository();
   const userRepository = new ApiUserRepository();
@@ -22,12 +22,11 @@ const UserPage = () => {
       setUser(u);
 
       const data = await ticketRepository.getTickets(u, { sortBy: 'date', status: 'Все' });
-      setTickets(data.items); // <-- сохраняем тикеты
+      setTickets(data.items);
 
-      // Считаем статистику
       const newCounts = data.items.reduce(
         (acc, ticket) => {
-          switch (ticket.status) { // <-- ticketStatus на фронте
+          switch (ticket.status) {
             case TicketStatus.Expectation:
               acc.new += 1;
               break;
@@ -49,6 +48,36 @@ const UserPage = () => {
     fetchData();
   }, []);
 
+  const handleTicketCreated = (createdTicket: any) => {
+    console.log('Ticket created:', createdTicket);
+    // Добавляем новый тикет в начало списка в правильном формате
+    const newTicketResponse = {
+      ticket: {
+        id: createdTicket.ticket.id,
+        name: createdTicket.ticket.name,
+        description: createdTicket.ticket.description,
+        type: createdTicket.ticket.type,
+        status: createdTicket.ticket.status,
+        city: createdTicket.ticket.city,
+        region: createdTicket.ticket.region,
+        createdTime: createdTicket.ticket.createdTime,
+        userId: createdTicket.ticket.userId,
+        tags: createdTicket.ticket.tags || [],
+        ai_comments: createdTicket.ticket.ai_comments || '',
+      },
+      user: createdTicket.user, // Сохраняем объект пользователя
+    };
+    
+    setTickets((prev) => [newTicketResponse, ...prev]);
+    
+    // Обновляем счётчики
+    setCounts((prev) => ({
+      ...prev,
+      all: prev.all + 1,
+      new: prev.new + 1,
+    }));
+  };
+
   const localName = localStorage.getItem("name")?.trim();
   const displayName = user?.fullName?.trim() || localName || "...";
 
@@ -60,7 +89,7 @@ const UserPage = () => {
       </p>
       <p className={styles.ticket_status}>Создавайте тикеты и отслеживайте их статус</p>
       <ContainerStats counts={counts} />
-      {user && <CreateTicket user={user} />}
+      {user && <CreateTicket user={user} onTicketCreated={handleTicketCreated} />}
       {user && <TicketListComponent list={tickets} mode="user" />}
     </div>
   );

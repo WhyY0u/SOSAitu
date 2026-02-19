@@ -1,7 +1,6 @@
 export const UserRoles = {
   Owner: "ROLE_OWNER",
-  Supervisor: "ROLE_SUPERVISOR",
-  RegionAdministrator: "ROLE_REGION_ADMINISTRATOR",
+  OblastiAdministator: "ROLE_OBLASTI_ADMINISTATOR",
   CityAdministrator: "ROLE_CITY_ADMINISTRATOR",
   Support: "ROLE_SUPPORT",
   User: "ROLE_USER",

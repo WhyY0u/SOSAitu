@@ -11,7 +11,7 @@ interface TicketResponse {
 
 interface TicketListComponentProps {
     list: TicketResponse[] | Ticket[];
-    mode?: 'admin' | 'user';
+    mode?: 'admin' | 'user' | 'support';
     onTicketUpdated?: (ticket: Ticket) => void;
 }
 

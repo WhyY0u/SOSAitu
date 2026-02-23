@@ -31,7 +31,7 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
     const [feedbackScore, setFeedbackScore] = useState<number | null>(localTicket.satisfactionScore ?? null);
     const [feedbackComment, setFeedbackComment] = useState(localTicket.satisfactionComment ?? '');
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
-    
+
     // Защита от undefined user
     if (!user) {
         return null;
@@ -42,6 +42,71 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
         setFeedbackScore(ticket.satisfactionScore ?? null);
         setFeedbackComment(ticket.satisfactionComment ?? '');
     }, [ticket]);
+
+    // Проверяем, есть ли детали для отображения
+    const hasDetails = useMemo(() => {
+        const adminResponse = localTicket.administratorResponse || localTicket.comment;
+        if (mode === 'admin') {
+            return !!(localTicket.ai_comments?.trim() || adminResponse);
+        }
+        if (mode === 'user') {
+            return !!(adminResponse || (localTicket.status === 'Completed' && !feedbackScore));
+        }
+        return false;
+    }, [localTicket, mode, feedbackScore]);
+
+    // Форматирует ответ администратора: убирает markdown и выделяет имя/время
+    const formatAdminResponse = (response: string) => {
+        // Если это формат "**Имя** (дата):\nтекст", преобразуем в HTML
+        const match = response.match(/^\*\*(.+?)\*\*\s*\(([^)]+)\):\s*(.*)$/s);
+        if (match) {
+            const [, name, dateTime, text] = match;
+            return (
+                <div>
+                    <div style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid #d0e3f0' }}>
+                        <span style={{ fontWeight: 600, color: '#2c3e50' }}>{name}</span>
+                        <span style={{ color: '#7f8c8d', fontSize: '13px', marginLeft: '10px' }}>
+                            {dateTime}
+                        </span>
+                    </div>
+                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{text.trim()}</div>
+                </div>
+            );
+        }
+        // Если есть разделители "---", показываем историю ответов
+        if (response.includes('---')) {
+            const parts = response.split('---');
+            return (
+                <div>
+                    {parts.map((part: string, index: number) => {
+                        const trimmed = part.trim();
+                        const partMatch = trimmed.match(/^\*\*(.+?)\*\*\s*\(([^)]+)\):\s*(.*)$/s);
+                        if (partMatch) {
+                            const [, name, dateTime, text] = partMatch;
+                            return (
+                                <div key={index} style={{ 
+                                    marginBottom: index < parts.length - 1 ? '16px' : '0',
+                                    paddingBottom: index < parts.length - 1 ? '16px' : '0',
+                                    borderBottom: index < parts.length - 1 ? '1px solid #d0e3f0' : 'none'
+                                }}>
+                                    <div style={{ marginBottom: '8px' }}>
+                                        <span style={{ fontWeight: 600, color: '#2c3e50' }}>{name}</span>
+                                        <span style={{ color: '#7f8c8d', fontSize: '13px', marginLeft: '10px' }}>
+                                            {dateTime}
+                                        </span>
+                                    </div>
+                                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{text.trim()}</div>
+                                </div>
+                            );
+                        }
+                        return <div key={index} style={{ whiteSpace: 'pre-wrap' }}>{trimmed}</div>;
+                    })}
+                </div>
+            );
+        }
+        // Простой текст без форматирования
+        return <span style={{ whiteSpace: 'pre-wrap' }}>{response}</span>;
+    };
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const el = textareaRef.current;
@@ -138,16 +203,19 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
             </div>
             <p className={`${styles.description_text}`}>{localTicket.description}</p>
 
-            <button
-                className={styles.expand_button}
-                onClick={() => setExpanded(!expanded)}
-            >
-                {expanded ? "Свернуть детали" : "Развернуть детали"}
-            </button>
+            {hasDetails && (
+                <button
+                    className={styles.expand_button}
+                    onClick={() => setExpanded(!expanded)}
+                    aria-expanded={expanded}
+                >
+                    {expanded ? "Свернуть детали" : "Развернуть детали"}
+                </button>
+            )}
 
-            {expanded && (
+            {expanded && hasDetails && (
                 <div className={styles.extra_content}>
-                    {mode === 'admin' && localTicket.ai_comments.trim() && (
+                    {mode === 'admin' && localTicket.ai_comments?.trim() && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRobot className={styles.ai_icon} />
@@ -157,27 +225,31 @@ const TicketComponent = ({ user, ticket, mode = 'admin', onTicketUpdated }: Tick
                         </div>
                     )}
 
-                    {mode === 'admin' && localTicket.comment && (
+                    {mode === 'admin' && (localTicket.administratorResponse || localTicket.comment) && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRegCommentDots className={styles.ai_icon} />
                                 <span className={styles.ai_title}>Комментарий администратора</span>
                             </div>
-                            <p className={styles.ai_comment_text}>{localTicket.comment}</p>
+                            <div className={styles.ai_comment_text}>
+                                {formatAdminResponse(localTicket.administratorResponse || localTicket.comment)}
+                            </div>
                         </div>
                     )}
 
-                    {mode === 'user' && localTicket.comment && (
+                    {mode === 'user' && (localTicket.administratorResponse || localTicket.comment) && (
                         <div className={styles.ai_comment_block}>
                             <div className={styles.ai_comment_header}>
                                 <FaRegCommentDots className={styles.ai_icon} />
                                 <span className={styles.ai_title}>Ответ администратора</span>
                             </div>
-                            <p className={styles.ai_comment_text}>{localTicket.comment}</p>
+                            <div className={styles.ai_comment_text}>
+                                {formatAdminResponse(localTicket.administratorResponse || localTicket.comment)}
+                            </div>
                         </div>
                     )}
 
-                    {mode === 'user' && localTicket.status === 'Completed' && (
+                    {mode === 'user' && localTicket.status === 'Completed' && feedbackScore === null && (
                         <div className={styles.feedback_block}>
                             <div className={styles.ai_comment_header}>
                                 <span className={styles.ai_title}>Оцените ответ</span>

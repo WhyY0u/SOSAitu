@@ -2,8 +2,9 @@
     width: 100%;
     display: flex;
     height: fit-content;
-        flex-direction: column;
+    flex-direction: column;
     padding-left: 10px;
+    padding-bottom: 15px;
     background-color: white;
     border-radius: 15px;
     border: 1px solid rgb(229, 229, 229);
@@ -94,6 +95,7 @@
 }
 .description_text {
     padding-top: 15px;
+    padding-bottom: 15px;
     font-family: Inter;
     font-size: 13px;
     color: rgb(67, 67, 67);
@@ -222,43 +224,57 @@
     transform: scale(0.97);
 }
 .ai_comment_block {
-  margin: 16px 0;
-  margin-right: 10px;
-  padding: 14px 16px;
+  margin: 12px 10px 12px 0;
+  padding: 16px 18px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f9f9ff, #f3f3f8);
-  border: 1px solid #e0e0f5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background: linear-gradient(135deg, #f0f7ff, #e8f4f8);
+  border: 1px solid #d0e3f0;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.08);
 }
 
 .ai_comment_header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d0e3f0;
 }
 
 .ai_icon {
-  color: #6065fa;
+  color: #4A90E2;
   font-size: 18px;
 }
 
 .ai_title {
   font-weight: 600;
   font-size: 14px;
-  color: #444;
+  color: #2c3e50;
 }
 
 .ai_comment_text {
   font-size: 14px;
-  color: #333;
-  line-height: 1.5;
+  color: #34495e;
+  line-height: 1.6;
   margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Стили для ответа администратора с форматированием */
+.ai_comment_text strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.ai_comment_text em {
+  color: #7f8c8d;
+  font-style: italic;
 }
 .expand_button {
   background: none;
   border: none;
-  color: #444; 
+  color: #444;
   font-size: 14px;
   cursor: pointer;
   padding: 6px 10px;
@@ -268,24 +284,77 @@
   letter-spacing: 0.3px;
   margin-top: 10px;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .expand_button:hover {
   background: #f1f1f1;
-  color: #000; 
+  color: #000;
 }
 
 .expand_button:active {
   transform: scale(0.96);
-  background: #e6e6e6; 
+  background: #e6e6e6;
 }
 
 .expand_button::after {
-  content: " ▼"; 
-  font-size: 12px;
+  content: "▼";
+  font-size: 10px;
   transition: transform 0.25s ease;
+  display: inline-block;
 }
 
-.expand_button.active::after {
-  transform: rotate(-180deg); 
+.expand_button[aria-expanded="true"]::after {
+  transform: rotate(-180deg);
+}
+
+.feedback_block {
+  margin: 12px 10px 12px 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fff9f0, #fff5e6);
+  border: 1px solid #f0d9c0;
+  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.08);
+}
+
+.feedback_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback_select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-family: Inter;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.feedback_select:focus {
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
+.feedback_textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+  font-family: Inter;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.feedback_textarea:focus {
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
 }

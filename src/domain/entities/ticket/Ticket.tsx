@@ -21,7 +21,8 @@ export type Ticket = {
     readonly type: string;             // ticketType теперь просто string
     readonly userCreate: User;
     readonly moderator?: User;
-    readonly comment: string;
+    readonly comment?: string;         // для обратной совместимости
+    readonly administratorResponse?: string;  // ответ администратора
     readonly satisfactionScore?: number;
     readonly satisfactionComment?: string;
 };

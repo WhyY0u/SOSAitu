@@ -8,11 +8,10 @@ export interface UpdateSupportTicketRequest {
 }
 
 export default class ApiSupportTicketRepository {
-  async updateTicket(request: UpdateSupportTicketRequest): Promise<Ticket> {
-    const response = await apiClient.post<Ticket>(`/support/tickets/${request.ticketId}/reply`, {
-      status: request.status,
-      comment: request.comment
+  async updateTicket(request: UpdateSupportTicketRequest): Promise<void> {
+    await apiClient.post(`/support/ticket/${request.ticketId}/response`, {
+      response: request.comment,
+      status: request.status
     });
-    return response.data;
   }
 }

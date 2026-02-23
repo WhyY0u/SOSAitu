@@ -64,12 +64,13 @@ const UserPage = () => {
         userId: createdTicket.ticket.userId,
         tags: createdTicket.ticket.tags || [],
         ai_comments: createdTicket.ticket.ai_comments || '',
+        administratorResponse: createdTicket.ticket.administratorResponse || null,
       },
       user: createdTicket.user, // Сохраняем объект пользователя
     };
-    
+
     setTickets((prev) => [newTicketResponse, ...prev]);
-    
+
     // Обновляем счётчики
     setCounts((prev) => ({
       ...prev,
